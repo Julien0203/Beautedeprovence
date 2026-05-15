@@ -3,6 +3,20 @@
    Nav · Scroll reveal · Counters · Back to top · Simulators
 ================================================================ */
 
+/* ── Prevent horizontal scroll on iOS ──────────────────────── */
+;(function() {
+  let startX = 0, startY = 0;
+  document.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchmove', function(e) {
+    const dx = Math.abs(e.touches[0].clientX - startX);
+    const dy = Math.abs(e.touches[0].clientY - startY);
+    if (dx > dy && e.cancelable) e.preventDefault();
+  }, { passive: false });
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ── Nav scroll state ──────────────────────────────────── */
