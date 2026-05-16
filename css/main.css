@@ -37,6 +37,7 @@
 
 /* ── Reset ──────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
 html { font-size: 16px; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.65; }
 img, video { max-width: 100%; height: auto; display: block; }
@@ -203,7 +204,7 @@ em, i { font-style: italic; }
 .hero__eyebrow::before, .hero__eyebrow::after {
   content: ''; flex: 0 0 24px; height: 1px; background: rgba(248,247,244,.3);
 }
-.hero__title { font-family: var(--font-display); font-size: clamp(3.5rem, 9vw, 9rem); font-weight: 400; line-height: .92; letter-spacing: -.02em; }
+.hero__title { font-family: var(--font-display); font-size: clamp(2.8rem, 9vw, 9rem); font-weight: 400; line-height: .92; letter-spacing: -.02em; overflow-wrap: break-word; }
 .hero__sub { font-size: 1rem; color: rgba(248,247,244,.65); letter-spacing: .05em; max-width: 380px; }
 .hero__pill {
   margin-top: .5rem;
@@ -477,24 +478,24 @@ em, i { font-style: italic; }
 @keyframes pulse { 0%,100%{opacity:.3;transform:scale(1)} 50%{opacity:1;transform:scale(1.3)} }
 
 /* ================================================================
-   CONTACT STRIP
+   CONTACT CARD (index.html — horaires)
 ================================================================ */
-.contact-strip {
+.contact-card {
   display: grid; grid-template-columns: 1fr;
   border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
 }
-@media (min-width: 640px) { .contact-strip { grid-template-columns: repeat(3, 1fr); } }
-.contact-strip__item {
-  padding: 1.75rem 2rem; border-bottom: 1px solid var(--line);
-  display: flex; flex-direction: column; gap: .5rem;
+@media (min-width: 640px) { .contact-card { grid-template-columns: repeat(3, 1fr); } }
+.contact-card__item {
+  padding: 1.5rem; border-bottom: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: .375rem;
 }
 @media (min-width: 640px) {
-  .contact-strip__item { border-bottom: none; border-right: 1px solid var(--line); }
-  .contact-strip__item:last-child { border-right: none; }
+  .contact-card__item { border-bottom: none; border-right: 1px solid var(--line); }
+  .contact-card__item:last-child { border-right: none; }
 }
-.contact-strip__label { font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--olive); }
-.contact-strip__val { font-family: var(--font-display); font-size: 1.125rem; color: var(--text); }
-.contact-strip__sub { font-size: .875rem; color: var(--text-muted); }
+.contact-card__label { font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--olive); }
+.contact-card__val { font-family: var(--font-display); font-size: 1.125rem; color: var(--text); }
+
 
 /* ================================================================
    FOOTER
@@ -586,6 +587,12 @@ em, i { font-style: italic; }
   .d1 { font-size: clamp(2.8rem, 12vw, 4rem); }
   .d2 { font-size: clamp(2rem, 8vw, 3rem); }
   .d3 { font-size: clamp(1.5rem, 6vw, 2.5rem); }
+
+  /* ── Hero */
+  .hero__title { font-size: clamp(2.4rem, 11vw, 9rem); }
+  .hero__content { padding-left: 1.25rem; padding-right: 1.25rem; }
+  .hero__eyebrow::before, .hero__eyebrow::after { display: none; }
+  .hero__pill { padding: .625rem 1.25rem; font-size: .75rem; letter-spacing: .08em; max-width: 100%; text-align: center; }
 
   /* ── Split : stack + réduire l'image-frame */
   .split { gap: 2rem; }
