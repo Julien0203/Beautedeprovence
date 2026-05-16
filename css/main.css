@@ -648,6 +648,7 @@ em, i { font-style: italic; }
 
 /* Section backgrounds */
 .section--alt { background: var(--bg-alt); }
+.section--olive { background: #CACFAF; }
 .section--olive-dark { background: var(--bg-dark); color: var(--white); }
 
 /* Eyebrow label */
