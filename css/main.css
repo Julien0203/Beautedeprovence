@@ -62,10 +62,10 @@ ul, ol { list-style: none; }
 em, i { font-style: italic; }
 
 /* ── Layout ─────────────────────────────────────────────────── */
-.wrap  { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 5rem); }
+.wrap  { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 5rem); overflow-x: clip; }
 .wrap--narrow { max-width: 800px; }
-.section { padding: clamp(5rem, 10vw, 10rem) 0; }
-.section--sm { padding: clamp(3rem, 6vw, 6rem) 0; }
+.section { padding: clamp(5rem, 10vw, 10rem) 0; overflow-x: clip; }
+.section--sm { padding: clamp(3rem, 6vw, 6rem) 0; overflow-x: clip; }
 
 /* ── Utilities ──────────────────────────────────────────────── */
 .text-olive  { color: var(--olive); }
