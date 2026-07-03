@@ -379,6 +379,7 @@ em, i { font-style: italic; }
 .review-track .review {
   flex: 0 0 clamp(280px, 78vw, 400px);
   scroll-snap-align: start;
+  justify-content: center;
 }
 .review-track .review__text { font-size: 1.0625rem; line-height: 1.6; }
 .review-nav {
