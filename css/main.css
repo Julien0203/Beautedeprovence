@@ -288,6 +288,10 @@ em, i { font-style: italic; }
 .grid-asym.reverse > *:first-child { order: 2; }
 .grid-asym.reverse > *:last-child { order: 1; }
 @media (max-width: 899px) { .grid-asym.reverse > * { order: unset; } }
+/* Empilé + centré (horaires) — une sous-section sous l'autre, même en desktop */
+.grid-asym--stack { grid-template-columns: 1fr !important; max-width: 640px; margin-inline: auto; text-align: center; gap: clamp(2.5rem, 5vw, 3.5rem); }
+.grid-asym--stack > div { display: flex; flex-direction: column; align-items: center; width: 100%; }
+.grid-asym--stack .contact-card { width: 100%; }
 
 /* ================================================================
    CARDS
@@ -590,6 +594,11 @@ em, i { font-style: italic; }
   margin-top: 3rem; padding-top: 2rem; padding-bottom: .5rem;
   border-top: 1px solid var(--line-dark);
   font-size: .8125rem;
+}
+/* Pages intérieures : footer__bottom hors du .wrap → même gabarit horizontal */
+.footer > .footer__bottom {
+  width: 100%; max-width: 1400px; margin-inline: auto;
+  padding-inline: clamp(1.5rem, 5vw, 5rem);
 }
 .footer__bottom a { transition: color var(--t); }
 .footer__bottom a:hover { color: var(--white); }
