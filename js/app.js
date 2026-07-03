@@ -121,23 +121,23 @@ const SIM_DATA = {
       }
     ],
     results: {
-      oily_detox:      { icon: '🌿', type: 'Peau grasse à purifier',       desc: 'Soin purifiant + madérothérapie drainante pour un teint équilibré et mat.', soins: ['Soin visage purifiant — 68€', 'Madérothérapie corps', 'Gommage OLIV\''], url: 'visage.html' },
-      oily_hydration:  { icon: '💧', type: 'Peau grasse déshydratée',       desc: 'Hydratation légère et non-comédogène avec les sérums OLIV\' — un teint équilibré et frais.', soins: ['Soin visage personnalisé — 65€', 'Sérum léger OLIV\''], url: 'visage.html' },
-      oily_radiance:   { icon: '✨', type: 'Peau grasse à illuminer',        desc: 'Un soin éclat purifiant pour affiner le grain de peau et unifier le teint.', soins: ['Soin visage éclat & luminosité — 70€', 'Gommage OLIV\''], url: 'visage.html' },
-      oily_antiage:    { icon: '⏳', type: 'Peau grasse mature',             desc: 'Soin anti-âge adapté aux peaux mixtes à grasses — fermeté sans occlusion.', soins: ['Soin visage anti-âge & fermeté — 80€', 'Madérothérapie visage'], url: 'maderotherapie.html' },
-      dry_hydration:   { icon: '💧', type: 'Peau sèche à réhydrater',       desc: 'Nutrition intense avec les huiles OLIV\' et un massage californien enveloppant.', soins: ['Soin visage hydratant intense — 70€', 'Massage californien — 70€', 'Crème fondante OLIV\''], url: 'visage.html' },
-      dry_radiance:    { icon: '🌸', type: 'Peau sèche à illuminer',         desc: 'Exfoliation douce + masque éclat OLIV\' pour retrouver un teint lumineux et confortable.', soins: ['Soin visage éclat & luminosité — 70€', 'Gommage doux OLIV\''], url: 'visage.html' },
-      dry_antiage:     { icon: '⏳', type: 'Peau mature à revitaliser',      desc: 'La madérothérapie lifting et les actifs anti-âge OLIV\' pour retrouver fermeté et éclat.', soins: ['Madérothérapie visage lifting', 'Soin anti-âge & fermeté — 80€', 'Huile précieuse OLIV\''], url: 'maderotherapie.html' },
-      dry_detox:       { icon: '🌿', type: 'Peau sèche sensibilisée',        desc: 'Nettoyage doux et rééquilibrage de la barrière cutanée avec les actifs OLIV\'.', soins: ['Soin visage personnalisé — 65€', 'Soin apaisant OLIV\''], url: 'visage.html' },
-      mixed_radiance:  { icon: '✨', type: 'Peau mixte à illuminer',         desc: 'Soin rééquilibrant + gommage doux pour révéler votre luminosité naturelle.', soins: ['Soin visage éclat & luminosité — 70€', 'Gommage OLIV\'', 'Madérothérapie visage'], url: 'maderotherapie.html' },
-      mixed_hydration: { icon: '💧', type: 'Peau mixte à équilibrer',        desc: 'Hydratation ciblée zone par zone pour un teint homogène et confortable.', soins: ['Soin visage personnalisé — 65€', 'Sérum hydratant OLIV\''], url: 'visage.html' },
-      mixed_antiage:   { icon: '⏳', type: 'Peau mixte mature',              desc: 'Madérothérapie lifting + soin anti-âge pour combiner fermeté et équilibre du teint.', soins: ['Madérothérapie visage lifting', 'Soin anti-âge & fermeté — 80€'], url: 'maderotherapie.html' },
-      mixed_detox:     { icon: '🌿', type: 'Peau mixte à purifier',          desc: 'Soin purifiant ciblé sur la zone T, douceur sur les joues — le protocole équilibre parfait.', soins: ['Soin visage purifiant — 68€', 'Gommage enzymatique OLIV\''], url: 'visage.html' },
-      normal_radiance: { icon: '🌸', type: 'Peau équilibrée à sublimer',    desc: 'Profitez de votre peau saine pour lui offrir des soins d\'éclat et de bien-être.', soins: ['Soin visage éclat & luminosité — 70€', 'Massage californien — 70€'], url: 'massages.html' },
-      normal_hydration:{ icon: '💧', type: 'Peau normale à entretenir',      desc: 'Un soin hydratant de maintenance pour garder votre peau souple et protégée.', soins: ['Soin visage personnalisé — 65€', 'Crème quotidienne OLIV\''], url: 'visage.html' },
-      normal_antiage:  { icon: '⏳', type: 'Peau normale à préserver',       desc: 'La prévention anti-âge pour maintenir votre capital jeunesse avec les actifs OLIV\'.', soins: ['Soin visage anti-âge & fermeté — 80€', 'Madérothérapie visage'], url: 'maderotherapie.html' },
-      normal_detox:    { icon: '🌿', type: 'Peau normale à détoxifier',      desc: 'Gommage et masque purifiant pour éliminer les impuretés et retrouver un teint frais.', soins: ['Soin visage prestige — 95€', 'Gommage OLIV\''], url: 'visage.html' },
-      default:         { icon: '💆', type: 'Soin sur mesure',                desc: 'Votre profil mérite une consultation personnalisée. Andréa établira le protocole idéal lors de votre rendez-vous.', soins: ['Consultation & bilan peau', 'Soin visage sur mesure — dès 65€'], url: 'rendez-vous.html' }
+      oily_hydration:  { icon: '💧', type: 'Peau grasse déshydratée',   desc: 'Une peau qui brille mais manque d\'eau : le Soin signature nourrit en profondeur sans effet gras, avec les actifs OLIV\'.', soins: ['Soin signature — 130€', 'Cocon lavande — 50€'], url: 'visage.html' },
+      oily_radiance:   { icon: '✨', type: 'Peau grasse à illuminer',    desc: 'Le Kobido, massage facial japonais, affine le grain de peau et ravive l\'éclat naturel de votre teint.', soins: ['Kobido — 95€', '+ Vapeur — 10€'], url: 'visage.html' },
+      oily_antiage:    { icon: '⏳', type: 'Peau grasse mature',         desc: 'Le Rituel Kobido raffermit et lisse tout en régulant, pour une peau tonique et équilibrée.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
+      oily_detox:      { icon: '🌿', type: 'Peau grasse à purifier',     desc: 'Le Soin rénovateur purifie et rééquilibre en profondeur pour un teint net et mat.', soins: ['Soin rénovateur — sur demande', '+ Vapeur — 10€'], url: 'visage.html' },
+      dry_hydration:   { icon: '💧', type: 'Peau sèche à nourrir',       desc: 'Nutrition intense : le Soin signature et les huiles OLIV\' réconfortent durablement les peaux sèches.', soins: ['Soin signature — 130€', 'Cocon lavande — 50€'], url: 'visage.html' },
+      dry_radiance:    { icon: '🌸', type: 'Peau sèche à illuminer',     desc: 'Le Kobido relance la microcirculation pour retrouver un teint lumineux et confortable.', soins: ['Kobido — 95€'], url: 'visage.html' },
+      dry_antiage:     { icon: '⏳', type: 'Peau sèche à revitaliser',   desc: 'Le Rituel Kobido raffermit et nourrit en profondeur pour une peau repulpée et détendue.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
+      dry_detox:       { icon: '🌿', type: 'Peau sèche sensibilisée',    desc: 'Le Soin rénovateur rééquilibre en douceur la barrière cutanée fragilisée.', soins: ['Soin rénovateur — sur demande'], url: 'visage.html' },
+      mixed_hydration: { icon: '💧', type: 'Peau mixte à équilibrer',    desc: 'Le Soin signature hydrate zone par zone pour un teint homogène et confortable.', soins: ['Soin signature — 130€'], url: 'visage.html' },
+      mixed_radiance:  { icon: '✨', type: 'Peau mixte à illuminer',     desc: 'Le Kobido unifie et illumine, révélant la luminosité naturelle des peaux mixtes.', soins: ['Kobido — 95€', '+ Vapeur — 10€'], url: 'visage.html' },
+      mixed_antiage:   { icon: '⏳', type: 'Peau mixte mature',          desc: 'Le Rituel Kobido conjugue fermeté et équilibre pour une peau lissée et rééquilibrée.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
+      mixed_detox:     { icon: '🌿', type: 'Peau mixte à purifier',      desc: 'Le Soin rénovateur cible les impuretés de la zone T tout en respectant les joues.', soins: ['Soin rénovateur — sur demande'], url: 'visage.html' },
+      normal_hydration:{ icon: '💧', type: 'Peau équilibrée à hydrater', desc: 'Le Soin signature entretient le confort et la souplesse de votre peau avec les soins OLIV\'.', soins: ['Soin signature — 130€'], url: 'visage.html' },
+      normal_radiance: { icon: '🌸', type: 'Peau équilibrée à sublimer', desc: 'Offrez à votre peau saine le Kobido pour un éclat immédiat et une détente profonde.', soins: ['Kobido — 95€', '+ Vapeur — 10€'], url: 'visage.html' },
+      normal_antiage:  { icon: '⏳', type: 'Peau à préserver',           desc: 'Le Rituel Kobido, en prévention, entretient fermeté et jeunesse naturellement.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
+      normal_detox:    { icon: '🌿', type: 'Peau à purifier',            desc: 'Le Soin rénovateur élimine les impuretés et redonne fraîcheur au teint.', soins: ['Soin rénovateur — sur demande'], url: 'visage.html' },
+      default:         { icon: '💆', type: 'Soin sur mesure',            desc: 'Votre profil mérite une consultation personnalisée. Andréa établira le protocole idéal lors de votre rendez-vous.', soins: ['Consultation & bilan peau', 'Soin visage — dès 95€'], url: 'rendez-vous.html' }
     }
   },
   conseiller: {
@@ -147,9 +147,9 @@ const SIM_DATA = {
         q: 'Qu\'attendez-vous de votre séance aujourd\'hui ?',
         opts: [
           { icon: '😌', label: 'Détente & relâchement des tensions', val: 'relax' },
-          { icon: '✨', label: 'Prendre soin de ma peau', val: 'skin' },
-          { icon: '💪', label: 'Récupérer & soulager mes muscles', val: 'sport' },
-          { icon: '🌸', label: 'Soins de beauté & finitions', val: 'beauty' },
+          { icon: '✨', label: 'Prendre soin de mon visage', val: 'skin' },
+          { icon: '🌿', label: 'Un rituel corps immersif', val: 'ritual' },
+          { icon: '🌸', label: 'Épilation & finitions', val: 'beauty' },
         ]
       },
       {
@@ -160,45 +160,22 @@ const SIM_DATA = {
           { icon: '⏰', label: 'Confortable — 1h à 1h30', val: 'medium' },
           { icon: '🌙', label: 'Immersif — 2h et plus', val: 'long' },
         ]
-      },
-      {
-        id: 'zone',
-        q: 'Quelle zone prioriser ?',
-        opts: [
-          { icon: '🫀', label: 'Corps entier', val: 'body' },
-          { icon: '🧖', label: 'Visage & décolleté', val: 'face' },
-          { icon: '👐', label: 'Mains ou pieds', val: 'hands' },
-          { icon: '👁', label: 'Regard & contour des yeux', val: 'eyes' },
-        ]
       }
     ],
     results: {
-      relax_short_body:  { icon: '💆', soin: 'Massage Express Dos & Nuque',      desc: 'Ciblage des zones de tension prioritaires pour un relâchement rapide en pause déjeuner.', duree: '30–45 min', tarif: '40–50€', url: 'massages.html' },
-      relax_medium_body: { icon: '🌊', soin: 'Massage Californien Corps Entier',  desc: 'Effleurages longs et enveloppants pour une détente sensorielle profonde — huiles OLIV\'.', duree: '1h', tarif: '70€', url: 'massages.html' },
-      relax_long_body:   { icon: '🌊', soin: 'Massage Californien Prestige 2h',   desc: 'Immersion totale : corps, visage, cuir chevelu et soins OLIV\' pour une expérience absolue.', duree: '2h', tarif: '120€', url: 'massages.html' },
-      relax_short_face:  { icon: '✨', soin: 'Soin Visage Express',               desc: 'Nettoyage et hydratation rapide pour un teint immédiat — parfait en 30 minutes.', duree: '30 min', tarif: '38€', url: 'visage.html' },
-      relax_medium_face: { icon: '🌸', soin: 'Soin Visage Personnalisé',          desc: 'Diagnostic + nettoyage + masque OLIV\' sur mesure. Teint lumineux, peau transformée.', duree: '1h', tarif: '65€', url: 'visage.html' },
-      relax_long_face:   { icon: '🌸', soin: 'Soin Visage Prestige',              desc: 'Protocole complet : gommage, masque, modelage et soin OLIV\' spécifique. Le maximum de bien-être.', duree: '1h30', tarif: '95€', url: 'visage.html' },
-      relax_short_hands: { icon: '💅', soin: 'Soin Mains Express',                desc: 'Mise en forme + soin cuticules pour des mains soignées rapidement.', duree: '20 min', tarif: '20€', url: 'mains-et-pieds.html' },
-      relax_medium_hands:{ icon: '💅', soin: 'Soin Mains Complet',                desc: 'Gommage + massage + hydratation OLIV\' + vernis — des mains parfaitement soignées.', duree: '45 min', tarif: '38€', url: 'mains-et-pieds.html' },
-      relax_short_eyes:  { icon: '👁', soin: 'Soin Regard Express',               desc: 'Sérum + contour yeux + drainage léger pour un regard reposé en quelques minutes.', duree: '20 min', tarif: '25€', url: 'regard.html' },
-      relax_medium_eyes: { icon: '👁', soin: 'Soin Regard Complet',               desc: 'Masque froid + actifs anti-cernes + massage — un regard reposé et lumineux.', duree: '30 min', tarif: '35€', url: 'regard.html' },
-      skin_short_face:   { icon: '✨', soin: 'Soin Visage Express',               desc: 'Nettoyage + hydratation ciblée pour un teint immédiat. Idéal en 30 minutes.', duree: '30 min', tarif: '38€', url: 'visage.html' },
-      skin_medium_face:  { icon: '✨', soin: 'Soin Visage Personnalisé',          desc: 'Diagnostic + nettoyage + exfoliation + masque OLIV\' sur mesure. Teint transformé.', duree: '1h', tarif: '65–70€', url: 'visage.html' },
-      skin_long_face:    { icon: '🌸', soin: 'Madérothérapie Visage Lifting',    desc: 'Modelage au bois pour drainer, raffermir et sculpter votre visage. Résultats visibles dès la 1ère séance.', duree: '1h30', tarif: 'À partir de 85€', url: 'maderotherapie.html' },
-      skin_short_body:   { icon: '🌿', soin: 'Massage Jambes Légères',           desc: 'Drainage, effleurages veineux et lymphatiques pour des jambes légères et reposées.', duree: '45 min', tarif: '55€', url: 'massages.html' },
-      skin_medium_body:  { icon: '🌿', soin: 'Madérothérapie Corps',             desc: 'Drainer, sculpter, raffermir — résultats visibles dès la 1ère séance avec les rouleaux en bois.', duree: '1h', tarif: 'À partir de 65€', url: 'maderotherapie.html' },
-      skin_long_body:    { icon: '🌿', soin: 'Madérothérapie Corps Prestige',    desc: 'Séance intensive de sculpture et drainage corporel pour des résultats durables.', duree: '1h30+', tarif: 'À partir de 95€', url: 'maderotherapie.html' },
-      sport_short_body:  { icon: '💪', soin: 'Massage Sportif Zones Ciblées',    desc: 'Travail musculaire ciblé sur jambes, dos ou épaules pour une récupération rapide.', duree: '45 min', tarif: '55€', url: 'massages.html' },
-      sport_medium_body: { icon: '💪', soin: 'Massage Sportif Corps Entier',     desc: 'Pétrissage profond pour relancer la circulation, dénouer les contractures et optimiser la récupération.', duree: '1h', tarif: '70€', url: 'massages.html' },
-      sport_long_body:   { icon: '💪', soin: 'Massage Sportif Récupération',     desc: 'Post-compétition : drainage + récupération complète pour une régénération musculaire optimale.', duree: '1h30', tarif: '90€', url: 'massages.html' },
-      beauty_short_hands:{ icon: '💅', soin: 'Soin Mains Complet',               desc: 'Gommage, massage et hydratation intense pour des mains parfaitement soignées.', duree: '45 min', tarif: '38€', url: 'mains-et-pieds.html' },
-      beauty_medium_hands:{ icon: '💅', soin: 'Soin Mains Prestige',             desc: 'Gommage + bain paraffine + massage + vernis semi-permanent — le soin mains ultime.', duree: '1h', tarif: '55€', url: 'mains-et-pieds.html' },
-      beauty_short_eyes: { icon: '👁', soin: 'Soin Regard Complet',              desc: 'Soin ciblé anti-cernes, anti-poches et anti-ridules. Un regard reposé en 30 minutes.', duree: '30 min', tarif: '35€', url: 'regard.html' },
-      beauty_medium_eyes:{ icon: '👁', soin: 'Lash Lift & Teinture',             desc: 'Rehaussement naturel des cils + coloration pour un effet maximal sans entretien quotidien.', duree: '1h15', tarif: '65€', url: 'regard.html' },
-      beauty_short_face: { icon: '🌸', soin: 'Soin Visage Express',              desc: 'Nettoyage + hydratation rapide pour un teint immédiat. Résultat visible en 30 minutes.', duree: '30 min', tarif: '38€', url: 'visage.html' },
-      beauty_medium_face:{ icon: '🌸', soin: 'Soin Visage Éclat & Luminosité',  desc: 'Protocole spécifique pour unifier le teint et illuminer le visage — résultat immédiat.', duree: '1h', tarif: '70€', url: 'visage.html' },
-      default:           { icon: '🤝', soin: 'Consultation Personnalisée',       desc: 'Andréa compose votre séance idéale selon votre profil. Appelez pour en discuter.', duree: 'Sur mesure', tarif: 'Dès 35€', url: 'rendez-vous.html' }
+      relax_short:  { icon: '💆', soin: 'Massage Sieste',              desc: 'Une parenthèse de 30 minutes pour relâcher dos et nuque et repartir apaisé(e).', duree: '30 min', tarif: '50€', url: 'massages.html' },
+      relax_medium: { icon: '🌊', soin: 'Massage Pause',               desc: 'Une heure de détente enveloppante, effleurages longs aux huiles OLIV\' pour dénouer les tensions.', duree: '1h', tarif: '100€', url: 'massages.html' },
+      relax_long:   { icon: '🌙', soin: 'Massage de l\'Oléraie',       desc: 'Un modelage complet de 1h30, l\'immersion sensorielle absolue signée Beauté de Provence.', duree: '1h30', tarif: '150€', url: 'massages.html' },
+      skin_short:   { icon: '✨', soin: 'Kobido',                       desc: 'Le massage facial japonais, liftant et éclatant. Nos soins visage démarrent en 1h.', duree: '1h', tarif: '95€', url: 'visage.html' },
+      skin_medium:  { icon: '🌸', soin: 'Soin signature',              desc: 'Un soin visage complet sur mesure : nettoyage, modelage et actifs OLIV\'.', duree: '1h30', tarif: '130€', url: 'visage.html' },
+      skin_long:    { icon: '🌸', soin: 'Rituel Kobido',               desc: 'Kobido et soin complet réunis pour une peau raffermie, lumineuse et détendue.', duree: '1h30', tarif: '130€', url: 'visage.html' },
+      ritual_short: { icon: '🌿', soin: 'Instant corps',               desc: 'Gommage sablé ou cocon lavande : une bulle express de 30 à 45 minutes.', duree: '30–45 min', tarif: '50–70€', url: 'corps.html' },
+      ritual_medium:{ icon: '🫒', soin: 'Rituel corps de Provence',    desc: 'Un rituel corps aux essences de Provence — des Oliviers au rituel des Alpilles.', duree: '1h–1h30', tarif: '100–145€', url: 'corps.html' },
+      ritual_long:  { icon: '🌙', soin: 'Rituel des Bastides',         desc: 'L\'expérience longue : 2h à 2h30 de soin corps complet, jusqu\'au Rituel signature.', duree: '2h–2h30', tarif: '190–220€', url: 'corps.html' },
+      beauty_short: { icon: '🌸', soin: 'Épilation express',           desc: 'Sourcils, lèvre ou menton : une finition nette en quelques minutes.', duree: '10–15 min', tarif: 'dès 8€', url: 'epilations.html' },
+      beauty_medium:{ icon: '🌸', soin: 'Épilation visage ou jambes',  desc: 'Visage complet ou demi-jambes : une épilation soignée et durable.', duree: '20–30 min', tarif: '20–30€', url: 'epilations.html' },
+      beauty_long:  { icon: '🌸', soin: 'Épilation complète',          desc: 'Jambes, maillot et aisselles : le combo complet pour une peau douce.', duree: '45 min–1h', tarif: 'dès 45€', url: 'epilations.html' },
+      default:      { icon: '🤝', soin: 'Consultation personnalisée',  desc: 'Andréa compose votre séance idéale selon votre profil. Appelez pour en discuter.', duree: 'Sur mesure', tarif: 'Sur devis', url: 'rendez-vous.html' }
     }
   }
 };
@@ -258,7 +235,7 @@ class Sim {
     if (this.type === 'diagnostic') {
       return this.data.results[`${a.type}_${a.concern}`] || this.data.results.default;
     }
-    return this.data.results[`${a.goal}_${a.duration}_${a.zone}`] || this.data.results.default;
+    return this.data.results[`${a.goal}_${a.duration}`] || this.data.results.default;
   }
 
   _result() {

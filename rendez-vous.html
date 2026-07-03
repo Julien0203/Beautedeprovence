@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prendre Rendez-vous — Beauté de Provence, Éguilles</title>
-  <meta name="description" content="Réservez votre soin à l'Institut Beauté de Provence. Massages, madérothérapie, soins visage, épilations. Andréa Ombry, Éguilles.">
+  <meta name="description" content="Réservez votre soin à l'Institut Beauté de Provence. Massages, soins visage, rituels corps, épilations. Andréa Ombry, Éguilles.">
   <link rel="canonical" href="https://www.beautedeprovence.fr/rendez-vous.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,11 +18,9 @@
   <div class="wrap nav__inner">
     <a href="index.html" class="nav__logo">Beauté de Provence</a>
     <ul class="nav__links">
-      <li><a href="maderotherapie.html" class="nav__link">Madérothérapie</a></li>
       <li><a href="massages.html" class="nav__link">Massages</a></li>
+      <li><a href="corps.html" class="nav__link">Corps</a></li>
       <li><a href="visage.html" class="nav__link">Visage</a></li>
-      <li><a href="mains-et-pieds.html" class="nav__link">Mains &amp; Pieds</a></li>
-      <li><a href="regard.html" class="nav__link">Regard</a></li>
       <li><a href="epilations.html" class="nav__link">Épilations</a></li>
     </ul>
     <a href="rendez-vous.html" class="nav__cta active">Prendre RDV</a>
@@ -32,11 +30,9 @@
   </div>
 </nav>
 <div class="nav__mobile">
-  <a href="maderotherapie.html">Madérothérapie</a>
   <a href="massages.html">Massages</a>
+  <a href="corps.html">Corps &amp; Rituels</a>
   <a href="visage.html">Visage</a>
-  <a href="mains-et-pieds.html">Mains &amp; Pieds</a>
-  <a href="regard.html">Regard</a>
   <a href="epilations.html">Épilations</a>
   <a href="boutique-oliv.html">Boutique OLIV'</a>
   <a href="rendez-vous.html">Prendre rendez-vous</a>
@@ -48,6 +44,29 @@
     <p class="breadcrumb"><a href="index.html">Accueil</a> / Rendez-vous</p>
     <h1 class="d1">Prendre rendez-vous</h1>
     <p class="page-hero__sub">Contactez Andréa par téléphone ou laissez le simulateur vous guider vers le soin idéal.</p>
+  </div>
+</section>
+
+<!-- RÉSERVATION EN LIGNE -->
+<section class="section" id="reservation">
+  <div class="wrap">
+    <div class="section-head section-head--center" data-reveal style="text-align:center">
+      <span class="eyebrow">Réservation en ligne</span>
+      <h2 class="d2">Choisissez votre créneau</h2>
+      <p class="section-head__sub">Sélectionnez votre soin, votre date et votre horaire directement ci-dessous.</p>
+    </div>
+
+    <div class="booking" data-reveal>
+      <!-- Module de réservation en ligne, connecté à Google Agenda.
+           Configuration : renseignez l'URL du script Google dans js/booking.js (CONFIG.apiUrl). -->
+      <div class="bk" id="booking-app"></div>
+      <noscript>
+        <div class="bk__fallback">
+          <p>La réservation en ligne nécessite JavaScript. Réservez par téléphone au
+            <a href="tel:+33652354565">06 52 35 45 65</a>.</p>
+        </div>
+      </noscript>
+    </div>
   </div>
 </section>
 
@@ -140,11 +159,9 @@
       <p class="footer__tagline">Institut massage &amp; esthétique<br>Éguilles, Bouches-du-Rhône</p>
     </div>
     <nav class="footer__nav">
-      <a href="maderotherapie.html">Madérothérapie</a>
       <a href="massages.html">Massages</a>
+      <a href="corps.html">Corps &amp; Rituels</a>
       <a href="visage.html">Soins visage</a>
-      <a href="mains-et-pieds.html">Mains &amp; pieds</a>
-      <a href="regard.html">Regard</a>
       <a href="epilations.html">Épilations</a>
       <a href="boutique-oliv.html">Boutique OLIV'</a>
       <a href="rendez-vous.html">Rendez-vous</a>
@@ -161,6 +178,7 @@
 </footer>
 
 <button class="back-top" aria-label="Retour en haut">↑</button>
+<script src="js/booking.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

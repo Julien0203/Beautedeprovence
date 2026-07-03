@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Espace Andréa — Beauté de Provence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="adm-body">
+
+<!-- ══════════ CONNEXION (démo) ══════════ -->
+<div class="adm-login" id="adm-login">
+  <form class="adm-login__card" id="adm-login-form">
+    <p class="adm-login__brand">Beauté de Provence</p>
+    <h1 class="adm-login__title">Espace Andréa</h1>
+    <p class="adm-login__sub">Gestion des clientes &amp; des emails</p>
+    <label class="adm-field">
+      <span>Mot de passe</span>
+      <input type="password" id="adm-pass" autocomplete="current-password" placeholder="••••••">
+    </label>
+    <button type="submit" class="btn btn--olive btn--lg" style="width:100%;justify-content:center">Se connecter</button>
+    <p class="adm-login__hint">Mode démonstration — mot de passe&nbsp;: <strong>demo</strong></p>
+    <p class="adm-login__err" id="adm-login-err" hidden>Mot de passe incorrect.</p>
+  </form>
+</div>
+
+<!-- ══════════ APPLICATION ══════════ -->
+<div class="adm-app" id="adm-app" hidden>
+
+  <header class="adm-top">
+    <div class="adm-top__left">
+      <span class="adm-top__brand">Beauté de Provence</span>
+      <span class="adm-badge">Mode démo</span>
+    </div>
+    <nav class="adm-tabs">
+      <button class="adm-tab active" data-tab="clients">Fiches clientes</button>
+      <button class="adm-tab" data-tab="emails">Emails</button>
+    </nav>
+    <div class="adm-top__right">
+      <button class="adm-link" id="adm-reset" title="Réinitialiser les données de démo">↺ Démo</button>
+      <button class="adm-link" id="adm-logout">Déconnexion</button>
+    </div>
+  </header>
+
+  <div class="adm-note">
+    Données locales à votre navigateur — <strong>aucun email réel n'est envoyé</strong>.
+    Cette version sert à valider le rendu avant le branchement définitif.
+  </div>
+
+  <!-- ── ONGLET CLIENTES ── -->
+  <main class="adm-panel" id="tab-clients">
+    <div class="adm-stats" id="adm-stats"></div>
+
+    <div class="adm-toolbar">
+      <input type="search" id="adm-search" class="adm-search" placeholder="Rechercher une cliente…">
+      <div class="adm-toolbar__actions">
+        <button class="btn btn--outline" id="adm-export">Exporter CSV</button>
+        <button class="btn btn--olive" id="adm-add">+ Ajouter une cliente</button>
+      </div>
+    </div>
+
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>Nom</th><th>Contact</th><th>Naissance</th><th>Consent.</th><th>Source</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="adm-clients"></tbody>
+      </table>
+      <p class="adm-empty" id="adm-empty" hidden>Aucune cliente ne correspond.</p>
+    </div>
+  </main>
+
+  <!-- ── ONGLET EMAILS ── -->
+  <main class="adm-panel" id="tab-emails" hidden>
+    <div class="adm-emails">
+      <form class="adm-compose" id="adm-compose">
+        <h2 class="h3">Nouvelle campagne</h2>
+        <label class="adm-field">
+          <span>Type</span>
+          <select id="em-type">
+            <option>Newsletter</option>
+            <option>Promotion</option>
+            <option>Relance clientes inactives</option>
+          </select>
+        </label>
+        <label class="adm-field">
+          <span>Audience</span>
+          <select id="em-audience">
+            <option value="consent">Toutes les clientes consenties</option>
+            <option value="newsletter">Inscrites newsletter</option>
+            <option value="all">Toutes les fiches</option>
+          </select>
+        </label>
+        <label class="adm-field">
+          <span>Objet de l'email</span>
+          <input type="text" id="em-objet" placeholder="Ex : Les nouveautés du mois 🌿">
+        </label>
+        <label class="adm-field">
+          <span>Message</span>
+          <textarea id="em-msg" rows="7" placeholder="Bonjour {prénom},&#10;&#10;Écrivez votre message ici…"></textarea>
+          <small class="adm-hint">Astuce : <code>{prénom}</code> sera remplacé par le prénom de chaque cliente.</small>
+        </label>
+        <button type="submit" class="btn btn--olive btn--lg">Envoyer (démo)</button>
+      </form>
+
+      <aside class="adm-preview">
+        <p class="adm-preview__label">Aperçu</p>
+        <div class="adm-mail" id="em-preview">
+          <div class="adm-mail__head">Beauté de Provence</div>
+          <div class="adm-mail__body">
+            <p class="adm-mail__subject" id="pv-objet">Objet de l'email</p>
+            <p class="adm-mail__text" id="pv-msg">Votre message apparaîtra ici…</p>
+            <span class="adm-mail__btn">Prendre rendez-vous</span>
+          </div>
+          <div class="adm-mail__foot">
+            Beauté de Provence · Éguilles · 06 52 35 45 65<br>
+            Vous recevez cet email car vous êtes cliente de l'institut. Se désinscrire.
+          </div>
+        </div>
+        <p class="adm-preview__count" id="em-count"></p>
+      </aside>
+    </div>
+
+    <h2 class="h3 adm-history-title">Campagnes envoyées</h2>
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead><tr><th>Date</th><th>Type</th><th>Objet</th><th>Audience</th><th>Destinataires</th><th>Statut</th></tr></thead>
+        <tbody id="adm-campaigns"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- ══════════ MODALE FICHE CLIENTE ══════════ -->
+<div class="adm-modal-bg" id="adm-modal-bg" hidden>
+  <form class="adm-modal" id="adm-form">
+    <div class="adm-modal__head">
+      <h2 class="h3" id="adm-modal-title">Nouvelle cliente</h2>
+      <button type="button" class="adm-modal__close" id="adm-modal-close" aria-label="Fermer">✕</button>
+    </div>
+    <input type="hidden" id="f-id">
+    <label class="adm-field"><span>Nom &amp; prénom *</span><input type="text" id="f-nom" required></label>
+    <div class="adm-field-row">
+      <label class="adm-field"><span>Email</span><input type="email" id="f-email"></label>
+      <label class="adm-field"><span>Téléphone</span><input type="tel" id="f-tel"></label>
+    </div>
+    <div class="adm-field-row">
+      <label class="adm-field"><span>Date de naissance</span><input type="date" id="f-naissance"></label>
+      <label class="adm-field"><span>Source</span>
+        <select id="f-source">
+          <option value="salon">Au salon</option>
+          <option value="newsletter">Newsletter</option>
+          <option value="rdv">Prise de RDV</option>
+          <option value="autre">Autre</option>
+        </select>
+      </label>
+    </div>
+    <label class="adm-field"><span>Notes</span><textarea id="f-notes" rows="2"></textarea></label>
+    <label class="adm-check">
+      <input type="checkbox" id="f-consent">
+      <span>La cliente accepte de recevoir des emails (newsletters, offres, anniversaire).</span>
+    </label>
+    <div class="adm-modal__foot">
+      <button type="button" class="btn btn--outline" id="adm-delete" hidden>Supprimer</button>
+      <button type="submit" class="btn btn--olive">Enregistrer</button>
+    </div>
+  </form>
+</div>
+
+<div class="adm-toast" id="adm-toast" hidden></div>
+
+<script src="js/store.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

@@ -25,11 +25,9 @@
     }
   ],
   "rewrites": [
-    { "source": "/maderotherapie", "destination": "/maderotherapie.html" },
     { "source": "/massages", "destination": "/massages.html" },
+    { "source": "/corps", "destination": "/corps.html" },
     { "source": "/visage", "destination": "/visage.html" },
-    { "source": "/mains-et-pieds", "destination": "/mains-et-pieds.html" },
-    { "source": "/regard", "destination": "/regard.html" },
     { "source": "/epilations", "destination": "/epilations.html" },
     { "source": "/boutique-oliv", "destination": "/boutique-oliv.html" },
     { "source": "/rendez-vous", "destination": "/rendez-vous.html" },

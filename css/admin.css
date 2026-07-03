@@ -1,0 +1,152 @@
+/* ================================================================
+   BEAUTÉ DE PROVENCE — admin.css
+   Espace de gestion (fiches clientes + emails). Charte olive/crème.
+================================================================ */
+.adm-body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── Connexion ──────────────────────────────────────────────── */
+.adm-login {
+  min-height: 100vh; display: grid; place-items: center; padding: 2rem;
+}
+.adm-login__card {
+  width: 100%; max-width: 380px; background: var(--white);
+  border: 1px solid var(--line); border-radius: 16px;
+  padding: clamp(2rem, 5vw, 3rem); text-align: center;
+  box-shadow: 0 20px 60px rgba(42,39,32,.10);
+}
+.adm-login__brand { font-family: var(--font-display); font-size: 1.35rem; color: var(--olive); }
+.adm-login__title { font-family: var(--font-display); font-size: 2.25rem; line-height: 1.05; margin: .25rem 0 .15rem; }
+.adm-login__sub { color: var(--text-muted); font-size: .875rem; margin-bottom: 1.75rem; }
+.adm-login__hint { margin-top: 1rem; font-size: .75rem; color: var(--text-muted); }
+.adm-login__err { margin-top: .75rem; font-size: .8125rem; color: #a3452f; }
+
+/* ── Champs (partagés) ──────────────────────────────────────── */
+.adm-field { display: flex; flex-direction: column; gap: .375rem; text-align: left; margin-bottom: 1rem; }
+.adm-field > span { font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--text-mid); }
+.adm-field input, .adm-field select, .adm-field textarea {
+  width: 100%; font-family: var(--font-body); font-size: .9375rem; color: var(--text);
+  background: var(--white); border: 1px solid var(--line); border-radius: 9px;
+  padding: .7rem .85rem; transition: border-color var(--t);
+}
+.adm-field input:focus, .adm-field select:focus, .adm-field textarea:focus {
+  outline: none; border-color: var(--olive);
+}
+.adm-field textarea { resize: vertical; line-height: 1.55; }
+.adm-hint { font-size: .72rem; color: var(--text-muted); }
+.adm-hint code, .adm-field code { background: var(--bg-alt); padding: .05rem .3rem; border-radius: 4px; font-size: .85em; }
+.adm-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.adm-check { display: flex; gap: .6rem; align-items: flex-start; font-size: .8125rem; color: var(--text-mid); margin: .25rem 0 1.25rem; cursor: pointer; }
+.adm-check input { margin-top: .15rem; accent-color: var(--olive); width: 16px; height: 16px; flex-shrink: 0; }
+
+/* ── Barre supérieure ───────────────────────────────────────── */
+.adm-app { max-width: 1200px; margin: 0 auto; padding: 0 clamp(1rem, 3vw, 2rem) 4rem; }
+.adm-top {
+  position: sticky; top: 0; z-index: 20; background: var(--bg);
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 1rem 0; border-bottom: 1px solid var(--line); flex-wrap: wrap;
+}
+.adm-top__brand { font-family: var(--font-display); font-size: 1.25rem; color: var(--olive); }
+.adm-badge { margin-left: .6rem; font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
+  background: var(--olive); color: var(--white); padding: .2rem .5rem; border-radius: 100px; vertical-align: middle; }
+.adm-tabs { display: flex; gap: .35rem; }
+.adm-tab {
+  padding: .5rem 1.1rem; border-radius: 100px; font-size: .8125rem; color: var(--text-mid);
+  transition: all var(--t);
+}
+.adm-tab.active { background: var(--text); color: var(--white); }
+.adm-tab:not(.active):hover { background: var(--bg-alt); }
+.adm-top__right { display: flex; gap: 1rem; }
+.adm-link { font-size: .8125rem; color: var(--text-muted); transition: color var(--t); }
+.adm-link:hover { color: var(--text); }
+
+.adm-note {
+  background: #EFE9D6; border: 1px solid #E2D9BE; color: #6b6444;
+  font-size: .8125rem; border-radius: 10px; padding: .7rem 1rem; margin: 1.25rem 0;
+}
+
+/* ── Stats ──────────────────────────────────────────────────── */
+.adm-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.adm-stat { background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 1.1rem 1.25rem; }
+.adm-stat__n { font-family: var(--font-display); font-size: 2.25rem; line-height: 1; color: var(--olive); }
+.adm-stat__l { font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: var(--text-muted); margin-top: .25rem; }
+
+/* ── Barre d'outils ─────────────────────────────────────────── */
+.adm-toolbar { display: flex; gap: 1rem; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 1rem; }
+.adm-search { flex: 1; min-width: 200px; font-family: var(--font-body); font-size: .9375rem;
+  background: var(--white); border: 1px solid var(--line); border-radius: 100px; padding: .65rem 1.1rem; }
+.adm-search:focus { outline: none; border-color: var(--olive); }
+.adm-toolbar__actions { display: flex; gap: .6rem; }
+.adm-toolbar .btn { padding: .6rem 1.3rem; font-size: .75rem; }
+
+/* ── Tableau ────────────────────────────────────────────────── */
+.adm-table-wrap { background: var(--white); border: 1px solid var(--line); border-radius: 12px; overflow: auto; }
+.adm-table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+.adm-table th { text-align: left; font-size: .7rem; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 500; padding: .85rem 1rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.adm-table td { padding: .8rem 1rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.adm-table tr:last-child td { border-bottom: none; }
+.adm-table tbody tr { transition: background var(--t); }
+.adm-table tbody tr:hover { background: #F4F2EC; }
+.adm-cell-name { font-weight: 500; }
+.adm-cell-sub { color: var(--text-muted); font-size: .8125rem; }
+.adm-pill { display: inline-block; font-size: .68rem; letter-spacing: .04em; text-transform: uppercase;
+  padding: .18rem .55rem; border-radius: 100px; border: 1px solid var(--line); color: var(--text-mid); }
+.adm-pill--yes { background: #E5EAD8; border-color: #cfd8ba; color: #566338; }
+.adm-pill--no  { background: #EFE3DE; border-color: #e0cdc5; color: #8a5a4a; }
+.adm-row-actions { display: flex; gap: .4rem; justify-content: flex-end; }
+.adm-icon-btn { font-size: .8rem; color: var(--text-muted); padding: .3rem .5rem; border-radius: 6px; transition: all var(--t); }
+.adm-icon-btn:hover { background: var(--bg-alt); color: var(--text); }
+.adm-empty { text-align: center; color: var(--text-muted); padding: 2rem; font-size: .875rem; }
+
+/* ── Emails ─────────────────────────────────────────────────── */
+.adm-emails { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; margin-bottom: 2.5rem; }
+.adm-compose { background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 1.5rem; }
+.adm-compose h2 { margin-bottom: 1.1rem; }
+.adm-preview { position: sticky; top: 90px; }
+.adm-preview__label { font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem; }
+.adm-mail { background: var(--white); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.adm-mail__head { background: var(--olive); color: var(--white); font-family: var(--font-display);
+  font-size: 1.4rem; text-align: center; padding: 1.5rem; }
+.adm-mail__body { padding: 1.75rem; text-align: center; }
+.adm-mail__subject { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.15; margin-bottom: 1rem; }
+.adm-mail__text { font-size: .9375rem; color: var(--text-mid); white-space: pre-wrap; text-align: left; margin-bottom: 1.5rem; }
+.adm-mail__btn { display: inline-block; background: var(--olive); color: var(--white); font-size: .75rem;
+  letter-spacing: .1em; text-transform: uppercase; padding: .7rem 1.6rem; border-radius: 100px; }
+.adm-mail__foot { background: var(--bg-alt); color: var(--text-muted); font-size: .7rem; text-align: center;
+  padding: 1rem; line-height: 1.6; }
+.adm-preview__count { font-size: .8125rem; color: var(--text-mid); margin-top: .75rem; text-align: center; }
+.adm-history-title { margin-bottom: 1rem; }
+
+/* ── Modale fiche ───────────────────────────────────────────── */
+.adm-modal-bg { position: fixed; inset: 0; background: rgba(28,26,21,.5); z-index: 60;
+  display: grid; place-items: center; padding: 1.5rem; }
+.adm-modal-bg[hidden] { display: none; }
+.adm-modal { width: 100%; max-width: 520px; background: var(--white); border-radius: 16px;
+  padding: 1.75rem; max-height: 92vh; overflow: auto; }
+.adm-modal__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+.adm-modal__close { font-size: 1rem; color: var(--text-muted); padding: .3rem .5rem; border-radius: 6px; }
+.adm-modal__close:hover { background: var(--bg-alt); color: var(--text); }
+.adm-modal__foot { display: flex; justify-content: space-between; gap: 1rem; margin-top: .5rem; }
+.adm-modal__foot .btn { flex: 0 0 auto; }
+.adm-modal__foot .btn--olive { margin-left: auto; }
+
+/* ── Toast ──────────────────────────────────────────────────── */
+.adm-toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(1rem);
+  background: var(--text); color: var(--white); font-size: .875rem; padding: .8rem 1.5rem; border-radius: 100px;
+  z-index: 80; opacity: 0; transition: all .3s var(--ease); box-shadow: 0 10px 30px rgba(0,0,0,.2); }
+.adm-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 820px) {
+  .adm-emails { grid-template-columns: 1fr; }
+  .adm-preview { position: static; }
+  .adm-top { justify-content: center; }
+  .adm-tabs { order: 3; width: 100%; justify-content: center; }
+}
+@media (max-width: 560px) {
+  .adm-stats { grid-template-columns: 1fr; }
+  .adm-field-row { grid-template-columns: 1fr; gap: 0; }
+  .adm-toolbar { flex-direction: column; align-items: stretch; }
+  .adm-toolbar__actions { justify-content: stretch; }
+  .adm-toolbar__actions .btn { flex: 1; justify-content: center; }
+}
