@@ -493,5 +493,17 @@
     }
   }
 
+  /* ── PRÉ-SÉLECTION via URL (?service=id) ─────────────────────
+     Depuis le diagnostic : la prestation suggérée est présélectionnée
+     et l'on saute directement au choix du créneau (date puis horaire). */
+  (function preselect() {
+    var id = new URLSearchParams(window.location.search).get('service');
+    if (!id) return;
+    SERVICES.some(function (g) { return g.items.some(function (s) {
+      if (s.id === id) { state.service = s; return true; }
+    }); });
+    if (state.service) state.step = 2;
+  })();
+
   render();
 })();

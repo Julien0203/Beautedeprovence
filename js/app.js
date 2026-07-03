@@ -159,23 +159,23 @@ const SIM_DATA = {
       }
     ],
     results: {
-      oily_hydration:  { icon: ICONS.droplet, type: 'Peau grasse déshydratée',   desc: 'Une peau qui brille mais manque d\'eau : le Soin signature nourrit en profondeur sans effet gras, avec les actifs OLIV\'.', soins: ['Soin signature — 130€', 'Cocon lavande — 50€'], url: 'visage.html' },
-      oily_radiance:   { icon: ICONS.sparkle, type: 'Peau grasse à illuminer',    desc: 'Le Kobido, massage facial japonais, affine le grain de peau et ravive l\'éclat naturel de votre teint.', soins: ['Kobido — 95€', '+ Vapeur — 10€'], url: 'visage.html' },
-      oily_antiage:    { icon: ICONS.clock, type: 'Peau grasse mature',         desc: 'Le Rituel Kobido raffermit et lisse tout en régulant, pour une peau tonique et équilibrée.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
-      oily_detox:      { icon: ICONS.leaf, type: 'Peau grasse à purifier',     desc: 'Le Soin rénovateur purifie et rééquilibre en profondeur pour un teint net et mat.', soins: ['Soin rénovateur — sur demande', '+ Vapeur — 10€'], url: 'visage.html' },
-      dry_hydration:   { icon: ICONS.droplet, type: 'Peau sèche à nourrir',       desc: 'Nutrition intense : le Soin signature et les huiles OLIV\' réconfortent durablement les peaux sèches.', soins: ['Soin signature — 130€', 'Cocon lavande — 50€'], url: 'visage.html' },
-      dry_radiance:    { icon: ICONS.flower, type: 'Peau sèche à illuminer',     desc: 'Le Kobido relance la microcirculation pour retrouver un teint lumineux et confortable.', soins: ['Kobido — 95€'], url: 'visage.html' },
-      dry_antiage:     { icon: ICONS.clock, type: 'Peau sèche à revitaliser',   desc: 'Le Rituel Kobido raffermit et nourrit en profondeur pour une peau repulpée et détendue.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
-      dry_detox:       { icon: ICONS.leaf, type: 'Peau sèche sensibilisée',    desc: 'Le Soin rénovateur rééquilibre en douceur la barrière cutanée fragilisée.', soins: ['Soin rénovateur — sur demande'], url: 'visage.html' },
-      mixed_hydration: { icon: ICONS.droplet, type: 'Peau mixte à équilibrer',    desc: 'Le Soin signature hydrate zone par zone pour un teint homogène et confortable.', soins: ['Soin signature — 130€'], url: 'visage.html' },
-      mixed_radiance:  { icon: ICONS.sparkle, type: 'Peau mixte à illuminer',     desc: 'Le Kobido unifie et illumine, révélant la luminosité naturelle des peaux mixtes.', soins: ['Kobido — 95€', '+ Vapeur — 10€'], url: 'visage.html' },
-      mixed_antiage:   { icon: ICONS.clock, type: 'Peau mixte mature',          desc: 'Le Rituel Kobido conjugue fermeté et équilibre pour une peau lissée et rééquilibrée.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
-      mixed_detox:     { icon: ICONS.leaf, type: 'Peau mixte à purifier',      desc: 'Le Soin rénovateur cible les impuretés de la zone T tout en respectant les joues.', soins: ['Soin rénovateur — sur demande'], url: 'visage.html' },
-      normal_hydration:{ icon: ICONS.droplet, type: 'Peau équilibrée à hydrater', desc: 'Le Soin signature entretient le confort et la souplesse de votre peau avec les soins OLIV\'.', soins: ['Soin signature — 130€'], url: 'visage.html' },
-      normal_radiance: { icon: ICONS.flower, type: 'Peau équilibrée à sublimer', desc: 'Offrez à votre peau saine le Kobido pour un éclat immédiat et une détente profonde.', soins: ['Kobido — 95€', '+ Vapeur — 10€'], url: 'visage.html' },
-      normal_antiage:  { icon: ICONS.clock, type: 'Peau à préserver',           desc: 'Le Rituel Kobido, en prévention, entretient fermeté et jeunesse naturellement.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
-      normal_detox:    { icon: ICONS.leaf, type: 'Peau à purifier',            desc: 'Le Soin rénovateur élimine les impuretés et redonne fraîcheur au teint.', soins: ['Soin rénovateur — sur demande'], url: 'visage.html' },
-      default:         { icon: ICONS.flower, type: 'Soin sur mesure',            desc: 'Votre profil mérite une consultation personnalisée. Andréa établira le protocole idéal lors de votre rendez-vous.', soins: ['Consultation & bilan peau', 'Soin visage — dès 95€'], url: 'rendez-vous.html' }
+      oily_hydration:  { icon: ICONS.droplet, type: 'Peau grasse déshydratée',   desc: 'Une peau qui brille mais manque d\'eau : le soin signature nourrit en profondeur sans effet gras, avec les actifs OLIV\'.', soins: ['Le soin signature — 130€'], serviceId: 'visage-signature', url: 'visage.html' },
+      oily_radiance:   { icon: ICONS.sparkle, type: 'Peau grasse à illuminer',    desc: 'Le Kobido provençal, massage facial japonais, affine le grain de peau et ravive l\'éclat naturel de votre teint.', soins: ['Le Kobido provençal — 95€'], serviceId: 'visage-kobido', url: 'visage.html' },
+      oily_antiage:    { icon: ICONS.clock, type: 'Peau grasse mature',         desc: 'Le rituel Kobido raffermit et lisse tout en régulant, pour une peau tonique et équilibrée.', soins: ['Le rituel Kobido provençal — 130€'], serviceId: 'visage-rituel-kobido', url: 'visage.html' },
+      oily_detox:      { icon: ICONS.leaf, type: 'Peau grasse à purifier',     desc: 'Le renouveau provençal purifie et rééquilibre en profondeur pour un teint net et mat.', soins: ['Le renouveau provençal — 90€'], serviceId: 'visage-renouveau', url: 'visage.html' },
+      dry_hydration:   { icon: ICONS.droplet, type: 'Peau sèche à nourrir',       desc: 'Nutrition intense : le soin signature et les huiles OLIV\' réconfortent durablement les peaux sèches.', soins: ['Le soin signature — 130€'], serviceId: 'visage-signature', url: 'visage.html' },
+      dry_radiance:    { icon: ICONS.flower, type: 'Peau sèche à illuminer',     desc: 'Le Kobido provençal relance la microcirculation pour retrouver un teint lumineux et confortable.', soins: ['Le Kobido provençal — 95€'], serviceId: 'visage-kobido', url: 'visage.html' },
+      dry_antiage:     { icon: ICONS.clock, type: 'Peau sèche à revitaliser',   desc: 'Le rituel Kobido raffermit et nourrit en profondeur pour une peau repulpée et détendue.', soins: ['Le rituel Kobido provençal — 130€'], serviceId: 'visage-rituel-kobido', url: 'visage.html' },
+      dry_detox:       { icon: ICONS.leaf, type: 'Peau sèche sensibilisée',    desc: 'Le renouveau provençal rééquilibre en douceur la barrière cutanée fragilisée.', soins: ['Le renouveau provençal — 90€'], serviceId: 'visage-renouveau', url: 'visage.html' },
+      mixed_hydration: { icon: ICONS.droplet, type: 'Peau mixte à équilibrer',    desc: 'Le soin signature hydrate zone par zone pour un teint homogène et confortable.', soins: ['Le soin signature — 130€'], serviceId: 'visage-signature', url: 'visage.html' },
+      mixed_radiance:  { icon: ICONS.sparkle, type: 'Peau mixte à illuminer',     desc: 'Le Kobido provençal unifie et illumine, révélant la luminosité naturelle des peaux mixtes.', soins: ['Le Kobido provençal — 95€'], serviceId: 'visage-kobido', url: 'visage.html' },
+      mixed_antiage:   { icon: ICONS.clock, type: 'Peau mixte mature',          desc: 'Le rituel Kobido conjugue fermeté et équilibre pour une peau lissée et rééquilibrée.', soins: ['Le rituel Kobido provençal — 130€'], serviceId: 'visage-rituel-kobido', url: 'visage.html' },
+      mixed_detox:     { icon: ICONS.leaf, type: 'Peau mixte à purifier',      desc: 'Le renouveau provençal cible les impuretés de la zone T tout en respectant les joues.', soins: ['Le renouveau provençal — 90€'], serviceId: 'visage-renouveau', url: 'visage.html' },
+      normal_hydration:{ icon: ICONS.droplet, type: 'Peau équilibrée à hydrater', desc: 'Le soin signature entretient le confort et la souplesse de votre peau avec les soins OLIV\'.', soins: ['Le soin signature — 130€'], serviceId: 'visage-signature', url: 'visage.html' },
+      normal_radiance: { icon: ICONS.flower, type: 'Peau équilibrée à sublimer', desc: 'Offrez à votre peau saine le Kobido provençal pour un éclat immédiat et une détente profonde.', soins: ['Le Kobido provençal — 95€'], serviceId: 'visage-kobido', url: 'visage.html' },
+      normal_antiage:  { icon: ICONS.clock, type: 'Peau à préserver',           desc: 'Le rituel Kobido, en prévention, entretient fermeté et jeunesse naturellement.', soins: ['Le rituel Kobido provençal — 130€'], serviceId: 'visage-rituel-kobido', url: 'visage.html' },
+      normal_detox:    { icon: ICONS.leaf, type: 'Peau à purifier',            desc: 'Le renouveau provençal élimine les impuretés et redonne fraîcheur au teint.', soins: ['Le renouveau provençal — 90€'], serviceId: 'visage-renouveau', url: 'visage.html' },
+      default:         { icon: ICONS.flower, type: 'Soin sur mesure',            desc: 'Votre profil mérite une consultation personnalisée. Andréa établira le protocole idéal lors de votre diagnostic beauté.', soins: ['Diagnostic beauté — 35€'], serviceId: 'diagnostic-peau', url: 'visage.html' }
     }
   },
   conseiller: {
@@ -287,7 +287,7 @@ class Sim {
                `<div class="sim-result__tags"><span class="sim-tag"><span class="sim-tag__ic">${ICONS.clock}</span>${r.duree}</span><span class="sim-tag"><span class="sim-tag__ic">${ICONS.euro}</span>${r.tarif}</span></div>`}
       <div class="sim-result__actions">
         <a href="${r.url}" class="btn btn--outline">Découvrir</a>
-        <a href="rendez-vous.html" class="btn btn--olive">Prendre RDV</a>
+        <a href="rendez-vous.html${r.serviceId ? '?service=' + r.serviceId : ''}" class="btn btn--olive">Prendre RDV</a>
         <button class="btn btn--outline" id="sim-restart" style="padding:.625rem 1.25rem">↺ Recommencer</button>
       </div>
     </div>`;
