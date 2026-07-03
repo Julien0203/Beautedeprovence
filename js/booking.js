@@ -13,7 +13,7 @@
               (créneaux générés localement, confirmation par téléphone).
   ---------------------------------------------------------------- */
   var CONFIG = {
-    apiUrl: '',                       // ← coller ici l'URL Google Apps Script (…/exec)
+    apiUrl: 'https://script.google.com/macros/s/AKfycbzfZJN3mzVBElYgBPvO76YjFnlDTMeRxDxcny7QwigXoSQINDJn3jTxC8crj6BGuR-q/exec',
     phone: '+33652354565',
     phoneDisplay: '06 52 35 45 65',
     slotStep: 30,                     // granularité des créneaux (minutes)

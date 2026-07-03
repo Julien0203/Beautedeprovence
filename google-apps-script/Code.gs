@@ -17,7 +17,7 @@ var SLOT_MIN    = 30;                  // granularité des créneaux (minutes)
 var LEAD_HOURS  = 2;                   // délai minimum avant un RDV (heures)
 var BUFFER_MIN  = 0;                   // marge entre deux RDV (minutes)
 var SALON_NAME  = 'Beauté de Provence';
-var SALON_EMAIL = '';                  // e-mail qui reçoit une copie (laisser vide pour ignorer)
+var SALON_EMAIL = 'aombry@gmail.com';  // e-mail qui reçoit une copie (laisser vide pour ignorer)
 
 // Horaires d'ouverture par jour : 0 = dimanche … 6 = samedi. [heureOuverture, heureFermeture]
 var OPEN_HOURS = {
