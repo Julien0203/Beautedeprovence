@@ -97,9 +97,11 @@ function book(d) {
   var end = new Date(start.getTime() + (d.duration || 60) * 60000);
 
   var priceTxt = (d.price == null || d.price === '') ? 'Sur devis' : d.price + ' €';
+  var sold = d.soldDuration || d.duration || 60;
   var desc =
     'Prestation : ' + d.service + '\n' +
-    'Durée : ' + (d.duration || 60) + ' min\n' +
+    'Durée soin : ' + sold + ' min\n' +
+    (d.duration && d.duration !== sold ? 'Temps cabine bloqué : ' + d.duration + ' min\n' : '') +
     'Tarif : ' + priceTxt + '\n' +
     'Client : ' + d.name + '\n' +
     'Téléphone : ' + d.phone + '\n' +

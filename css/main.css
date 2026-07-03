@@ -861,6 +861,19 @@ em, i { font-style: italic; }
   padding: .375rem .875rem; border-radius: 100px;
 }
 
+/* Offre diagnostic (page OLIV') */
+.oliv-offer {
+  display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+  margin-top: 2rem; padding: 1.25rem 1.5rem;
+  border: 1px solid var(--olive); border-radius: 6px; background: var(--bg-card);
+}
+.oliv-offer__label { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.2; }
+.oliv-offer__meta { font-size: .85rem; color: var(--text-muted); margin-top: .25rem; }
+.oliv-offer__price {
+  font-family: var(--font-display); font-size: 2rem; line-height: 1;
+  color: var(--olive); white-space: nowrap;
+}
+
 /* Simulator launchers (RDV page) */
 .sim-launchers { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
 @media (min-width: 640px) { .sim-launchers { grid-template-columns: repeat(2, 1fr); } }
@@ -987,6 +1000,7 @@ em, i { font-style: italic; }
 .bk__service-main { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
 .bk__service-name { font-size: .975rem; color: var(--bk-ink); font-weight: 500; }
 .bk__service-dur { font-size: .82rem; color: var(--bk-muted); }
+.bk__service-desc { font-size: .8rem; color: var(--bk-muted); line-height: 1.45; margin-top: .15rem; max-width: 52ch; }
 .bk__service-price { font-size: .9rem; color: var(--bk-ink); font-weight: 600; white-space: nowrap; }
 .bk__service-cta {
   flex: 0 0 auto; font-size: .78rem; font-weight: 600; letter-spacing: .02em;

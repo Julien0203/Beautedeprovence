@@ -14,8 +14,8 @@
   ---------------------------------------------------------------- */
   var CONFIG = {
     apiUrl: 'https://script.google.com/macros/s/AKfycbzfZJN3mzVBElYgBPvO76YjFnlDTMeRxDxcny7QwigXoSQINDJn3jTxC8crj6BGuR-q/exec',
-    phone: '+33652354565',
-    phoneDisplay: '06 52 35 45 65',
+    phone: '+33783035319',
+    phoneDisplay: '07 83 03 53 19',
     slotStep: 30,                     // granularité des créneaux (minutes)
     leadHours: 2,                     // délai minimum avant un RDV (heures)
     maxDaysAhead: 60,                 // horizon de réservation
@@ -28,9 +28,13 @@
      price = prix en € (null = « Sur devis »)
   ---------------------------------------------------------------- */
   var SERVICES = [
+    { cat: 'Diagnostic de peau', items: [
+      { id: 'diagnostic-peau',  name: 'Diagnostic peau sur mesure', dur: 30,  price: 35, desc: 'Bilan complet en institut pour définir votre routine de soins adaptée. Montant déduit si vous réservez un soin.' }
+    ]},
     { cat: 'Massages', items: [
       { id: 'massage-sieste',   name: 'Massage Sieste',            dur: 30,  price: 50 },
       { id: 'massage-pause',    name: 'Massage Pause',             dur: 60,  price: 100 },
+      { id: 'massage-balade',   name: 'Balade sous les oliviers',  dur: 60,  cabine: 90, price: 100, desc: 'Drainage lymphatique — dégonfle le corps, stimule la circulation, sensation de légèreté.' },
       { id: 'massage-oleraie',  name: 'Massage Oléraie',           dur: 90,  price: 150 }
     ]},
     { cat: 'Soins visage', items: [
@@ -92,6 +96,8 @@
   /* ── HELPERS ───────────────────────────────────────────────── */
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function ymd(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  /* Durée à BLOQUER dans l'agenda = temps en cabine (cabine) si défini, sinon la durée vendue. */
+  function blockDur(s) { return (s && s.cabine) ? s.cabine : (s ? s.dur : 0); }
   function priceLabel(p) { return p == null ? 'Sur devis' : p + '\u00A0€'; }
   function durLabel(m) {
     var h = Math.floor(m / 60), mn = m % 60;
@@ -183,6 +189,7 @@
           '<span class="bk__service-main">' +
             '<span class="bk__service-name">' + esc(s.name) + '</span>' +
             '<span class="bk__service-dur">' + durLabel(s.dur) + '</span>' +
+            (s.desc ? '<span class="bk__service-desc">' + esc(s.desc) + '</span>' : '') +
           '</span>' +
           '<span class="bk__service-side">' +
             '<span class="bk__service-price">' + priceLabel(s.price) + '</span>' +
@@ -400,7 +407,7 @@
 
     // Étape 3 : chargement des créneaux
     if (state.step === 3) {
-      fetchSlots(state.date, state.service.dur).then(renderSlots);
+      fetchSlots(state.date, blockDur(state.service)).then(renderSlots);
     }
 
     // Navigation
@@ -447,7 +454,8 @@
     var payload = {
       serviceId: state.service.id,
       service: state.service.name,
-      duration: state.service.dur,
+      duration: blockDur(state.service),   // temps réellement bloqué en cabine
+      soldDuration: state.service.dur,     // durée annoncée à la cliente
       price: state.service.price,
       date: state.date,
       time: state.time,
