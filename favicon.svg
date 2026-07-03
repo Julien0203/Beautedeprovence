@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Beauté de Provence">
+  <rect width="64" height="64" rx="15" fill="#818260"/>
+  <!-- rameau d'olivier stylisé -->
+  <g fill="none" stroke="#EFEDE4" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 50 C32 40 32 28 32 16"/>
+    <path d="M32 24 C26 22 22 24 20 29 C26 30 30 29 32 24 Z" fill="#EFEDE4" stroke="none"/>
+    <path d="M32 33 C38 31 42 33 44 38 C38 39 34 38 32 33 Z" fill="#EFEDE4" stroke="none"/>
+    <path d="M32 42 C27 41 23.5 43 22 47 C27 48 30.5 46.5 32 42 Z" fill="#EFEDE4" stroke="none"/>
+  </g>
+  <!-- olive -->
+  <circle cx="42.5" cy="46" r="3.6" fill="#EFEDE4"/>
+</svg>
