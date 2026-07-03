@@ -747,6 +747,18 @@ em, i { font-style: italic; }
   text-transform: uppercase; color: var(--olive); margin-bottom: 1rem;
 }
 
+/* Badge « certifiée » (experte facialiste) */
+.cert-badge {
+  display: inline-flex; align-items: center; gap: .55rem;
+  padding: .5rem .9rem; margin-bottom: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--olive) 35%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--olive) 7%, transparent);
+  color: var(--olive);
+  font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 500;
+}
+.cert-badge__icon { width: 1.15rem; height: 1.15rem; flex: 0 0 auto; }
+
 /* Section head block */
 .section-head { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
 .section-head .d2 { margin-top: .5rem; }

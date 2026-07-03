@@ -35,8 +35,9 @@ function doGet(e) {
   var action = e && e.parameter ? e.parameter.action : '';
   if (action === 'slots') {
     var date = e.parameter.date;                 // 'YYYY-MM-DD'
-    var dur  = parseInt(e.parameter.dur, 10) || 60;
-    return json({ slots: getSlots(date, dur) });
+    var dur  = parseInt(e.parameter.dur, 10) || 60;   // temps cabine total à bloquer
+    var sold = parseInt(e.parameter.sold, 10) || dur; // durée du soin (par défaut = cabine)
+    return json({ slots: getSlots(date, dur, sold) });
   }
   return json({ ok: true, service: SALON_NAME + ' — booking API' });
 }
@@ -51,8 +52,17 @@ function doPost(e) {
   }
 }
 
-/* ─── CALCUL DES CRÉNEAUX LIBRES ───────────────────────────────── */
-function getSlots(dateStr, durMin) {
+/* ─── CALCUL DES CRÉNEAUX LIBRES ───────────────────────────────────
+   durMin  = temps cabine total à bloquer dans l'agenda.
+   soldMin = durée du soin annoncée à la cliente (par défaut = durMin).
+   L'horaire renvoyé = début du SOIN. Le supplément (durMin − soldMin)
+   est réparti moitié avant / moitié après le soin :
+   bloc réservé = [soin − avant , soin + soldMin + après]. */
+function getSlots(dateStr, durMin, soldMin) {
+  soldMin = soldMin || durMin;
+  var before = Math.floor((durMin - soldMin) / 2);
+  var after  = durMin - soldMin - before;
+
   var open = OPEN_HOURS[dayOfWeek(dateStr)];
   if (!open) return [];
 
@@ -60,8 +70,8 @@ function getSlots(dateStr, durMin) {
   var dayStart = dateTime(dateStr, open[0], 0);
   var dayEnd   = dateTime(dateStr, open[1], 0);
 
-  // Événements occupés du jour
-  var events = cal.getEvents(dayStart, dayEnd);
+  // Événements occupés du jour (élargis pour capter les blocs qui débordent avant l'ouverture)
+  var events = cal.getEvents(new Date(dayStart.getTime() - durMin * 60000), dayEnd);
   var busy = events
     .filter(function (ev) { return !ev.isAllDayEvent() && ev.getMyStatus() !== CalendarApp.GuestStatus.NO; })
     .map(function (ev) { return { s: ev.getStartTime().getTime(), e: ev.getEndTime().getTime() }; });
@@ -70,11 +80,15 @@ function getSlots(dateStr, durMin) {
   var minTime = now + LEAD_HOURS * 3600 * 1000;
   var slots = [];
 
-  for (var t = dayStart.getTime(); t + durMin * 60000 <= dayEnd.getTime(); t += SLOT_MIN * 60000) {
+  // t = début du soin ; le bloc [t−avant , t+soldMin+après] doit tenir dans l'ouverture
+  for (var t = dayStart.getTime() + before * 60000;
+       t + (soldMin + after) * 60000 <= dayEnd.getTime();
+       t += SLOT_MIN * 60000) {
     if (t < minTime) continue;
-    var slotEnd = t + durMin * 60000;
+    var blockStart = t - before * 60000;
+    var blockEnd   = t + (soldMin + after) * 60000;
     var overlap = busy.some(function (b) {
-      return t < (b.e + BUFFER_MIN * 60000) && (slotEnd + BUFFER_MIN * 60000) > b.s;
+      return blockStart < (b.e + BUFFER_MIN * 60000) && (blockEnd + BUFFER_MIN * 60000) > b.s;
     });
     if (!overlap) slots.push(Utilities.formatDate(new Date(t), TIMEZONE, 'HH:mm'));
   }
@@ -86,22 +100,30 @@ function book(d) {
   if (!d.date || !d.time || !d.service || !d.name || !d.phone) {
     return { ok: false, error: 'Champs manquants' };
   }
-  // Vérifie que le créneau est toujours libre
-  var still = getSlots(d.date, d.duration || 60);
+  var cabine = d.duration || 60;                 // temps cabine total à bloquer
+  var sold   = d.soldDuration || cabine;         // durée du soin
+  var before = Math.floor((cabine - sold) / 2);
+  var after  = cabine - sold - before;
+
+  // Vérifie que le créneau (début du soin) est toujours libre
+  var still = getSlots(d.date, cabine, sold);
   if (still.indexOf(d.time) === -1) {
     return { ok: false, error: 'Créneau déjà pris', slots: still };
   }
 
   var hm = d.time.split(':');
-  var start = dateTime(d.date, parseInt(hm[0], 10), parseInt(hm[1], 10));
-  var end = new Date(start.getTime() + (d.duration || 60) * 60000);
+  var soinStart = dateTime(d.date, parseInt(hm[0], 10), parseInt(hm[1], 10));
+  // Bloc agenda centré : moitié du supplément avant le soin, moitié après
+  var start = new Date(soinStart.getTime() - before * 60000);
+  var end   = new Date(soinStart.getTime() + (sold + after) * 60000);
 
   var priceTxt = (d.price == null || d.price === '') ? 'Sur devis' : d.price + ' €';
-  var sold = d.soldDuration || d.duration || 60;
+  var soinTxt = Utilities.formatDate(soinStart, TIMEZONE, 'HH:mm') + ' → ' +
+    Utilities.formatDate(new Date(soinStart.getTime() + sold * 60000), TIMEZONE, 'HH:mm');
   var desc =
     'Prestation : ' + d.service + '\n' +
-    'Durée soin : ' + sold + ' min\n' +
-    (d.duration && d.duration !== sold ? 'Temps cabine bloqué : ' + d.duration + ' min\n' : '') +
+    'Durée soin : ' + sold + ' min (' + soinTxt + ')\n' +
+    (cabine !== sold ? 'Temps cabine bloqué : ' + cabine + ' min (' + before + ' min avant + ' + after + ' min après)\n' : '') +
     'Tarif : ' + priceTxt + '\n' +
     'Client : ' + d.name + '\n' +
     'Téléphone : ' + d.phone + '\n' +
@@ -119,7 +141,7 @@ function book(d) {
     try {
       MailApp.sendEmail(SALON_EMAIL,
         'Nouveau RDV — ' + d.name + ' (' + d.service + ')',
-        desc + '\n\nLe ' + Utilities.formatDate(start, TIMEZONE, 'EEEE d MMMM yyyy \'à\' HH:mm'));
+        desc + '\n\nLe ' + Utilities.formatDate(soinStart, TIMEZONE, 'EEEE d MMMM yyyy \'à\' HH:mm'));
     } catch (err) { /* silencieux */ }
   }
 

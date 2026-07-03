@@ -24,12 +24,15 @@
   };
 
   /* ── CARTE DES PRESTATIONS (tarifs réels) ──────────────────────
-     dur = durée en minutes (utilisée pour bloquer l'agenda)
-     price = prix en € (null = « Sur devis »)
+     dur    = durée du soin (annoncée à la cliente), en minutes
+     cabine = temps réellement occupé en cabine, en minutes (bloqué dans l'agenda).
+              Le supplément (cabine − dur) est réparti moitié avant / moitié après le soin.
+              Si cabine est absent, le blocage = dur.
+     price  = prix en € (null = « Sur devis »)
   ---------------------------------------------------------------- */
   var SERVICES = [
     { cat: 'Diagnostic de peau', items: [
-      { id: 'diagnostic-peau',  name: 'Diagnostic peau sur mesure', dur: 30,  price: 35, desc: 'Bilan complet en institut pour définir votre routine de soins adaptée. Montant déduit si vous réservez un soin.' }
+      { id: 'diagnostic-peau',  name: 'Diagnostic beauté',         dur: 30,  cabine: 45,  price: 35, desc: 'Bilan complet de votre peau en institut pour définir votre routine et vos soins adaptés. Montant déduit si vous réservez un soin.' }
     ]},
     { cat: 'Massages', items: [
       { id: 'massage-sieste',   name: 'Massage Sieste',            dur: 30,  price: 50 },
@@ -38,10 +41,12 @@
       { id: 'massage-oleraie',  name: 'Massage Oléraie',           dur: 90,  price: 150 }
     ]},
     { cat: 'Soins visage', items: [
-      { id: 'visage-kobido',    name: 'Kobido',                    dur: 60,  price: 95 },
-      { id: 'visage-signature', name: 'Soin signature',            dur: 90,  price: 130 },
-      { id: 'visage-rituel',    name: 'Rituel Kobido',             dur: 90,  price: 130 },
-      { id: 'visage-renov',     name: 'Soin rénovateur',           dur: 60,  price: null }
+      { id: 'visage-eveil',     name: "L'éveil provençal",         dur: 45,  cabine: 75,  price: 65,  desc: 'Un soin personnalisé adapté aux besoins de votre peau pour retrouver confort, fraîcheur et équilibre.' },
+      { id: 'visage-eclat',     name: "L'éclat des oliviers",      dur: 60,  cabine: 90,  price: 90,  desc: "Un soin drainant qui réveille les traits, illumine le teint et révèle l'éclat naturel de la peau." },
+      { id: 'visage-renouveau', name: 'Le renouveau provençal',    dur: 60,  cabine: 90,  price: 90,  desc: "Un soin rénovateur à base d'actifs végétaux qui exfolient en douceur, affine le grain de peau et révèle l'éclat du teint." },
+      { id: 'visage-signature', name: 'Le soin signature Beauté de Provence', dur: 90, cabine: 120, price: 130, desc: 'Rituel expert : travail musculaire, stimulation circulatoire et action cellulaire. Les traits sont détendus, le teint rayonnant.' },
+      { id: 'visage-kobido',    name: 'Le Kobido provençal',       dur: 60,  cabine: 90,  price: 95,  desc: "Massage facialiste inspiré de l'art japonais : stimule, draine et redessine les contours du visage, pour un effet naturellement liftant." },
+      { id: 'visage-rituel-kobido', name: 'Le rituel Kobido provençal', dur: 90, cabine: 120, price: 130, desc: "L'alliance d'un soin visage sur mesure et du Kobido provençal pour une expérience complète de beauté et de bien-être." }
     ]},
     { cat: 'Rituels corps', items: [
       { id: 'corps-oliviers',   name: 'Rituel des Oliviers',       dur: 60,  price: 100 },
@@ -111,8 +116,15 @@
     return WDAYS_FULL[d.getDay()] + ' ' + (+p[2]) + ' ' + MONTHS[+p[1] - 1].toLowerCase();
   }
 
-  /* ── GÉNÉRATION LOCALE DES CRÉNEAUX (mode démo / fallback) ──── */
-  function localSlots(ymdStr, durMin) {
+  /* ── GÉNÉRATION LOCALE DES CRÉNEAUX (mode démo / fallback) ────
+     cabineMin = temps total bloqué en cabine ; soldMin = durée du soin.
+     L'horaire proposé à la cliente = début du SOIN. Le supplément
+     (cabineMin − soldMin) est réparti moitié avant / moitié après :
+     le bloc agenda = [soin − avant , soin + soldMin + après]. */
+  function localSlots(ymdStr, cabineMin, soldMin) {
+    soldMin = soldMin || cabineMin;
+    var before = Math.floor((cabineMin - soldMin) / 2);
+    var after = cabineMin - soldMin - before;
     var p = ymdStr.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2]);
     var open = CONFIG.hours[d.getDay()];
     if (!open) return [];
@@ -121,7 +133,8 @@
     var now = new Date();
     var minStart = 0;
     if (ymd(now) === ymdStr) minStart = now.getHours() * 60 + now.getMinutes() + CONFIG.leadHours * 60;
-    for (var t = start; t + durMin <= end; t += CONFIG.slotStep) {
+    // t = début du soin ; le bloc [t−before , t+soldMin+after] doit tenir dans l'ouverture
+    for (var t = start + before; t + soldMin + after <= end; t += CONFIG.slotStep) {
       if (t < minStart) continue;
       out.push(pad(Math.floor(t / 60)) + ':' + pad(t % 60));
     }
@@ -129,13 +142,15 @@
   }
 
   /* ── APPELS BACKEND (Google Apps Script) ───────────────────── */
-  function fetchSlots(ymdStr, durMin) {
-    if (!CONFIG.apiUrl) return Promise.resolve({ slots: localSlots(ymdStr, durMin), demo: true });
-    var url = CONFIG.apiUrl + '?action=slots&date=' + encodeURIComponent(ymdStr) + '&dur=' + durMin;
+  function fetchSlots(ymdStr, cabineMin, soldMin) {
+    soldMin = soldMin || cabineMin;
+    if (!CONFIG.apiUrl) return Promise.resolve({ slots: localSlots(ymdStr, cabineMin, soldMin), demo: true });
+    var url = CONFIG.apiUrl + '?action=slots&date=' + encodeURIComponent(ymdStr) +
+      '&dur=' + cabineMin + '&sold=' + soldMin;
     return fetch(url)
       .then(function (r) { return r.json(); })
       .then(function (d) { return { slots: d.slots || [], demo: false }; })
-      .catch(function () { return { slots: localSlots(ymdStr, durMin), demo: true, error: true }; });
+      .catch(function () { return { slots: localSlots(ymdStr, cabineMin, soldMin), demo: true, error: true }; });
   }
 
   function sendBooking(payload) {
@@ -407,7 +422,7 @@
 
     // Étape 3 : chargement des créneaux
     if (state.step === 3) {
-      fetchSlots(state.date, blockDur(state.service)).then(renderSlots);
+      fetchSlots(state.date, blockDur(state.service), state.service.dur).then(renderSlots);
     }
 
     // Navigation
