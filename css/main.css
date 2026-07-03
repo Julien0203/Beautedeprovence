@@ -368,6 +368,39 @@ em, i { font-style: italic; }
 .review__author { font-size: .8125rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
 .review__service { font-size: .75rem; color: var(--olive-light); letter-spacing: .05em; margin-top: .25rem; }
 
+/* ── Carrousel avis (défilement horizontal + flèches) ── */
+.review-carousel { position: relative; }
+.review-track {
+  display: flex; gap: 1.5rem; overflow-x: auto; scroll-snap-type: x mandatory;
+  scroll-behavior: smooth; padding: .25rem 0;
+  scrollbar-width: none; -ms-overflow-style: none;
+}
+.review-track::-webkit-scrollbar { display: none; }
+.review-track .review {
+  flex: 0 0 clamp(280px, 78vw, 400px);
+  scroll-snap-align: start;
+}
+.review-track .review__text { font-size: 1.0625rem; line-height: 1.6; }
+.review-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--white); color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 2;
+  box-shadow: 0 6px 20px -10px rgba(42,39,32,.4);
+  transition: background var(--t), color var(--t), border-color var(--t), opacity var(--t);
+}
+.review-nav:hover { background: var(--olive); color: var(--white); border-color: var(--olive); }
+.review-nav svg { width: 20px; height: 20px; }
+.review-nav--prev { left: -20px; }
+.review-nav--next { right: -20px; }
+.review-nav:disabled { opacity: .3; cursor: default; box-shadow: none; }
+.review-nav:disabled:hover { background: var(--white); color: var(--text); border-color: var(--line); }
+@media (max-width: 720px) {
+  .review-nav--prev { left: 2px; }
+  .review-nav--next { right: 2px; }
+}
+
 /* ================================================================
    SIMULATOR
 ================================================================ */

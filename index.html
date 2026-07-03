@@ -100,17 +100,9 @@
 <!-- ═══════════════════════════════ SIMULATEURS ═══════════════════════ -->
 <section class="section--sm" style="background:var(--bg-card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="wrap">
-    <div style="display:grid;grid-template-columns:1fr;gap:1px;background:var(--line)">
-      <div class="grid-tools" style="display:grid;gap:1px;background:var(--line)">
-        <div style="background:var(--bg-card);padding:clamp(2rem,4vw,3rem)" data-reveal>
-          <h3 class="h2" style="margin-bottom:1.5rem">Quel est votre type de peau ?</h3>
-          <button class="btn btn--outline" data-sim="diagnostic">Démarrer le diagnostic →</button>
-        </div>
-        <div style="background:var(--bg);padding:clamp(2rem,4vw,3rem)" data-reveal data-delay="2">
-          <h3 class="h2" style="margin-bottom:1.5rem">Quel soin est fait pour vous ?</h3>
-          <button class="btn btn--olive" data-sim="conseiller">Trouver mon soin →</button>
-        </div>
-      </div>
+    <div style="text-align:center;padding:clamp(.5rem,3vw,1.5rem) 0" data-reveal>
+      <h3 class="h2" style="margin-bottom:1.5rem">Quel est votre type de peau ?</h3>
+      <button class="btn btn--outline" data-sim="diagnostic">Démarrer le diagnostic →</button>
     </div>
   </div>
 </section>
@@ -216,6 +208,18 @@
 </section>
 
 
+<!-- ═══════════════════════════ CONSEIL PERSONNALISÉ ══════════════════ -->
+<section class="section--sm" style="border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div style="text-align:center;max-width:600px;margin:0 auto" data-reveal>
+      <p class="section-eyebrow">Conseil personnalisé</p>
+      <h2 class="d3" style="margin:0 0 1rem">Quel soin est fait pour vous ?</h2>
+      <p class="section-sub" style="margin:0 auto 2.25rem">Répondez à quelques questions et découvrez le soin idéal selon vos envies du moment.</p>
+      <button class="btn btn--olive btn--lg" data-sim="conseiller">Trouver mon soin →</button>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════════════════════ OLIV' ═════════════════════════════ -->
 <section class="section oliv-section">
   <div class="wrap">
@@ -259,31 +263,95 @@
       <p class="section-eyebrow">Témoignages</p>
       <h2 class="d2">Ce qu'elles en disent</h2>
     </div>
-    <div class="grid-3">
-      <article class="review" data-reveal data-delay="1">
-        <div class="review__stars">★★★★★</div>
-        <p class="review__text">« Une madérothérapie incroyable. Andréa est très professionnelle et à l'écoute. Je repars complètement détendue, les résultats sont visibles dès la première séance. »</p>
-        <div>
-          <p class="review__author">Lucie M.</p>
-          <p class="review__service">Madérothérapie corps</p>
-        </div>
-      </article>
-      <article class="review" data-reveal data-delay="2">
-        <div class="review__stars">★★★★★</div>
-        <p class="review__text">« Le soin visage avec les produits OLIV' est absolument divin — ma peau n'a jamais été aussi lumineuse. L'ambiance de l'institut est un vrai cocon. »</p>
-        <div>
-          <p class="review__author">Stéphanie R.</p>
-          <p class="review__service">Soin visage &amp; onglerie</p>
-        </div>
-      </article>
-      <article class="review" data-reveal data-delay="3">
-        <div class="review__stars">★★★★★</div>
-        <p class="review__text">« Andréa est attentionnée, son soin visage est une merveille. Je suis cliente fidèle depuis le premier rendez-vous. »</p>
-        <div>
-          <p class="review__author">Audrey B.</p>
-          <p class="review__service">Soin visage</p>
-        </div>
-      </article>
+    <div class="review-carousel" data-reveal>
+      <button class="review-nav review-nav--prev" type="button" aria-label="Avis précédent">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+      </button>
+      <div class="review-track" id="review-track">
+        <article class="review">
+          <div class="review__stars">★★★★★</div>
+          <p class="review__text">« En vacances en Provence, j'ai découvert cet institut et j'ai eu la chance d'y faire un drainage lymphatique. Résultat : je suis ravie ! La praticienne est adorable, très à l'écoute et d'un grand professionnalisme. J'y retourne d'ailleurs pour tester un soin visage. Les produits Oliv', locale et bio, sentent divinement bon. Je recommande à 100 % ! »</p>
+          <div>
+            <p class="review__author">Yolaine</p>
+            <p class="review__service">Drainage lymphatique</p>
+          </div>
+        </article>
+        <article class="review">
+          <div class="review__stars">★★★★★</div>
+          <p class="review__text">« Merci Andréa pour ce moment très agréable, ainsi que pour votre gentillesse suite à mon soin visage… Je recommande l'institut Beauté de Provence. »</p>
+          <div>
+            <p class="review__author">Stéphanie</p>
+            <p class="review__service">Soin visage</p>
+          </div>
+        </article>
+        <article class="review">
+          <div class="review__stars">★★★★★</div>
+          <p class="review__text">« Je me suis offert un massage du corps et visage : 2h de pure détente… Andréa est très professionnelle, son cocon est accueillant. Je reviendrai avec plaisir lors de mes prochains passages dans la région. J'ai pris le gommage de la gamme Oliv… une pépite ! Merci »</p>
+          <div>
+            <p class="review__author">Lucie</p>
+            <p class="review__service">Massage corps &amp; visage</p>
+          </div>
+        </article>
+        <article class="review">
+          <div class="review__stars">★★★★★</div>
+          <p class="review__text">« Excellente rencontre ! Andréa est une excellente masseuse et praticienne. Lorsque je viens dans la région, c'est un plaisir de retrouver cet institut intimiste et à taille humaine, avec d'excellents produits de soin. Je recommande ! »</p>
+          <div>
+            <p class="review__author">Clara</p>
+            <p class="review__service">Massage &amp; soins</p>
+          </div>
+        </article>
+        <article class="review">
+          <div class="review__stars">★★★★★</div>
+          <p class="review__text">« Première visite chez Beauté de Provence, un soin visage exceptionnel, Andréa est très professionnelle : un vrai moment de détente. Je recommande à 100 % »</p>
+          <div>
+            <p class="review__author">Audrey</p>
+            <p class="review__service">Soin visage</p>
+          </div>
+        </article>
+        <article class="review">
+          <div class="review__stars">★★★★★</div>
+          <p class="review__text">« Première séance de drainage lymphatique visage et corps au top. Soin relaxant et efficace. Une praticienne très professionnelle et bel institut pour un moment cocooning. À refaire ! »</p>
+          <div>
+            <p class="review__author">Candy</p>
+            <p class="review__service">Drainage lymphatique</p>
+          </div>
+        </article>
+        <article class="review">
+          <div class="review__stars">★★★★★</div>
+          <p class="review__text">« La prise de rdv sur le site est très pratique. Le salon est ressourçant, Andréa est très professionnelle, massages et soins au top. Détente et relaxation au RDV. Belle expérience. Je recommande »</p>
+          <div>
+            <p class="review__author">Évelyne</p>
+            <p class="review__service">Massages &amp; soins</p>
+          </div>
+        </article>
+        <article class="review">
+          <div class="review__stars">★★★★★</div>
+          <p class="review__text">« Un accueil chaleureux, des soins superbes, des produits de qualité et des conseils avisés. Une très belle parenthèse pour prendre du temps pour soi. »</p>
+          <div>
+            <p class="review__author">Pauline</p>
+            <p class="review__service">Soins &amp; conseils</p>
+          </div>
+        </article>
+        <article class="review">
+          <div class="review__stars">★★★★★</div>
+          <p class="review__text">« Très bel accueil. Grande disponibilité et gentillesse. Soin bien réalisé. Je recommande vivement cet institut. »</p>
+          <div>
+            <p class="review__author">Sophie</p>
+            <p class="review__service">Soin</p>
+          </div>
+        </article>
+        <article class="review">
+          <div class="review__stars">★★★★★</div>
+          <p class="review__text">« Parfait ! Je reviendrai avec plaisir ! »</p>
+          <div>
+            <p class="review__author">Lou</p>
+            <p class="review__service">Cliente fidèle</p>
+          </div>
+        </article>
+      </div>
+      <button class="review-nav review-nav--next" type="button" aria-label="Avis suivant">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+      </button>
     </div>
   </div>
 </section>
@@ -427,5 +495,6 @@
 <script src="js/store.js"></script>
 <script src="js/app.js"></script>
 <script src="js/newsletter.js"></script>
+<script src="js/reviews.js"></script>
 </body>
 </html>
