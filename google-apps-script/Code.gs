@@ -18,6 +18,9 @@ var LEAD_HOURS  = 2;                   // délai minimum avant un RDV (heures)
 var BUFFER_MIN  = 0;                   // marge entre deux RDV (minutes)
 var SALON_NAME  = 'Beauté de Provence';
 var SALON_EMAIL = 'aombry@gmail.com';  // e-mail qui reçoit une copie (laisser vide pour ignorer)
+var SALON_PHONE = '07 83 03 53 19';    // téléphone affiché dans l'e-mail de confirmation
+var SALON_ADDR  = '13510 Éguilles';    // adresse affichée dans l'e-mail de confirmation
+var SEND_CLIENT_EMAIL = true;          // envoyer un e-mail de confirmation à la cliente (true/false)
 
 // Horaires d'ouverture par jour : 0 = dimanche … 6 = samedi. [heureOuverture, heureFermeture]
 var OPEN_HOURS = {
@@ -145,6 +148,11 @@ function book(d) {
     } catch (err) { /* silencieux */ }
   }
 
+  // E-mail de confirmation à la cliente (optionnel)
+  if (SEND_CLIENT_EMAIL && d.email) {
+    try { sendClientConfirmation(d, soinStart, sold, priceTxt); } catch (err) { /* silencieux */ }
+  }
+
   return {
     ok: true,
     id: event.getId(),
@@ -152,6 +160,68 @@ function book(d) {
     time: d.time,
     service: d.service
   };
+}
+
+/* ─── E-MAIL DE CONFIRMATION CLIENTE ───────────────────────────── */
+function sendClientConfirmation(d, soinStart, sold, priceTxt) {
+  var prenom  = String(d.name || '').trim().split(' ')[0] || '';
+  var jourTxt = Utilities.formatDate(soinStart, TIMEZONE, 'EEEE d MMMM yyyy');
+  var heureTxt = Utilities.formatDate(soinStart, TIMEZONE, 'HH\'h\'mm');
+  jourTxt = jourTxt.charAt(0).toUpperCase() + jourTxt.slice(1);   // Lundi 14 juillet 2025
+
+  var subject = 'Votre rendez-vous est confirmé — ' + SALON_NAME;
+
+  var text =
+    'Bonjour ' + prenom + ',\n\n' +
+    'Votre rendez-vous chez ' + SALON_NAME + ' est confirmé.\n\n' +
+    'Prestation : ' + d.service + '\n' +
+    'Date : ' + jourTxt + ' à ' + heureTxt + '\n' +
+    'Durée : ' + sold + ' min\n' +
+    'Tarif : ' + priceTxt + '\n\n' +
+    SALON_ADDR + '\n' +
+    'Tél. ' + SALON_PHONE + '\n\n' +
+    'Un empêchement ? Prévenez-nous au ' + SALON_PHONE + '.\n\n' +
+    'À très bientôt,\n' + SALON_NAME;
+
+  var html =
+    '<div style="margin:0;padding:24px 0;background:#EFEDE4;font-family:Georgia,\'Times New Roman\',serif;color:#2b2b28">' +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">' +
+        '<table role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px;width:100%;background:#ffffff;border:1px solid #e2ddcf">' +
+          '<tr><td style="background:#818260;padding:26px 32px;text-align:center;color:#fff;font-size:20px;letter-spacing:.04em">' + SALON_NAME + '</td></tr>' +
+          '<tr><td style="padding:32px 32px 8px">' +
+            '<p style="margin:0 0 14px;font-size:16px">Bonjour ' + escapeHtml(prenom) + ',</p>' +
+            '<p style="margin:0 0 22px;font-size:15px;line-height:1.6;color:#55534b">Votre rendez-vous est <strong style="color:#818260">confirmé</strong>. Nous avons hâte de vous accueillir.</p>' +
+          '</td></tr>' +
+          '<tr><td style="padding:0 32px">' +
+            '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f7f5ef;border:1px solid #ece7da">' +
+              row('Prestation', escapeHtml(d.service)) +
+              row('Date', escapeHtml(jourTxt)) +
+              row('Heure', escapeHtml(heureTxt)) +
+              row('Durée', sold + ' min') +
+              row('Tarif', escapeHtml(priceTxt)) +
+            '</table>' +
+          '</td></tr>' +
+          '<tr><td style="padding:24px 32px 8px;font-size:14px;line-height:1.7;color:#55534b">' +
+            '<strong style="color:#2b2b28">' + SALON_NAME + '</strong><br>' + escapeHtml(SALON_ADDR) + '<br>' +
+            'Tél. <a href="tel:' + SALON_PHONE.replace(/\s/g,'') + '" style="color:#818260;text-decoration:none">' + SALON_PHONE + '</a>' +
+          '</td></tr>' +
+          '<tr><td style="padding:12px 32px 30px;font-size:12.5px;line-height:1.6;color:#8a877c">Un empêchement ? Prévenez-nous au ' + SALON_PHONE + ' et nous décalerons votre rendez-vous.</td></tr>' +
+        '</table>' +
+      '</td></tr></table>' +
+    '</div>';
+
+  MailApp.sendEmail({ to: d.email, name: SALON_NAME, subject: subject, body: text, htmlBody: html });
+}
+function row(label, value) {
+  return '<tr>' +
+    '<td style="padding:11px 16px;border-bottom:1px solid #ece7da;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#9a978c;font-family:Arial,sans-serif">' + label + '</td>' +
+    '<td style="padding:11px 16px;border-bottom:1px solid #ece7da;font-size:14px;color:#2b2b28;text-align:right">' + value + '</td>' +
+    '</tr>';
+}
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+  });
 }
 
 /* ─── OUTILS ───────────────────────────────────────────────────── */
