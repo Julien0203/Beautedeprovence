@@ -398,8 +398,13 @@ em, i { font-style: italic; }
 .review-nav:disabled { opacity: .3; cursor: default; box-shadow: none; }
 .review-nav:disabled:hover { background: var(--white); color: var(--text); border-color: var(--line); }
 @media (max-width: 720px) {
-  .review-nav--prev { left: 2px; }
-  .review-nav--next { right: 2px; }
+  /* Flèches sous le carrousel pour libérer la zone de swipe */
+  .review-carousel { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+  .review-track { order: 0; flex: 1 1 100%; }
+  .review-nav {
+    position: static; transform: none; order: 1;
+    width: 44px; height: 44px; margin-top: 1.25rem;
+  }
 }
 
 /* ================================================================
