@@ -752,6 +752,7 @@ em, i { font-style: italic; }
   margin-top: 1rem; color: var(--text-muted); font-size: 1rem;
   max-width: 560px; line-height: 1.7;
 }
+.section-head--center .section-head__sub { margin-inline: auto; }
 
 /* Page hero additions */
 .page-hero__inner { }
