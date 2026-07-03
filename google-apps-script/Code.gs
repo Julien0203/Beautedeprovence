@@ -49,6 +49,7 @@ function doGet(e) {
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
+    if (data && data.type === 'subscribe') return json(subscribe(data));
     return json(book(data));
   } catch (err) {
     return json({ ok: false, error: String(err) });
@@ -222,6 +223,79 @@ function escapeHtml(s) {
   return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
     return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
   });
+}
+
+/* ─── NEWSLETTER ───────────────────────────────────────────────────
+   Enregistre l'e-mail dans une feuille Google (créée automatiquement au
+   premier abonné, id stocké dans les propriétés du script) + envoie un
+   message de bienvenue à la cliente et une notification au salon. */
+function subscribe(d) {
+  var email = String(d && d.email ? d.email : '').trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { ok: false, error: 'email_invalide' };
+  }
+  var source = String(d && d.source ? d.source : '').slice(0, 120);
+
+  var sheet = getNlSheet();
+  // Anti-doublon : si l'e-mail existe déjà, on renvoie ok sans re-créer
+  var existing = sheet.getRange(1, 2, Math.max(sheet.getLastRow(), 1), 1).getValues();
+  var already = existing.some(function (r) {
+    return String(r[0]).trim().toLowerCase() === email.toLowerCase();
+  });
+  if (!already) {
+    sheet.appendRow([new Date(), email, source]);
+    // Message de bienvenue à la cliente
+    try {
+      MailApp.sendEmail({
+        to: email,
+        name: SALON_NAME,
+        subject: 'Bienvenue chez ' + SALON_NAME,
+        htmlBody:
+          '<div style="font-family:Arial,Helvetica,sans-serif;max-width:520px;margin:auto;color:#2b2823">' +
+            '<div style="background:#818260;color:#EFEDE4;padding:22px 24px;font-size:20px;letter-spacing:.02em">' +
+              SALON_NAME +
+            '</div>' +
+            '<div style="background:#EFEDE4;padding:24px">' +
+              '<p>Merci pour votre inscription à notre newsletter.</p>' +
+              '<p>Vous recevrez quelques nouvelles par an&nbsp;: nouveautés, soins de saison ' +
+              'et petites attentions — jamais d\'excès.</p>' +
+              '<p style="margin-top:20px;font-size:13px;color:#6b665f">' +
+                SALON_NAME + ' · ' + SALON_ADDR + ' · ' + SALON_PHONE +
+              '</p>' +
+              '<p style="font-size:12px;color:#9a938a">Vous pouvez vous désinscrire à tout moment ' +
+              'en répondant à cet e-mail.</p>' +
+            '</div>' +
+          '</div>'
+      });
+    } catch (err) { /* silencieux */ }
+    // Notification au salon
+    if (SALON_EMAIL) {
+      try {
+        MailApp.sendEmail(SALON_EMAIL,
+          'Nouvel abonné newsletter — ' + email,
+          'Nouvel abonné à la newsletter :\n\n' + email +
+          '\nPage : ' + (source || '—') +
+          '\nDate : ' + Utilities.formatDate(new Date(), TIMEZONE, 'dd/MM/yyyy HH:mm'));
+      } catch (err) { /* silencieux */ }
+    }
+  }
+  return { ok: true, already: already };
+}
+
+function getNlSheet() {
+  var props = PropertiesService.getScriptProperties();
+  var id = props.getProperty('NL_SHEET_ID');
+  var ss;
+  if (id) {
+    try { ss = SpreadsheetApp.openById(id); } catch (err) { ss = null; }
+  }
+  if (!ss) {
+    ss = SpreadsheetApp.create(SALON_NAME + ' — Newsletter');
+    props.setProperty('NL_SHEET_ID', ss.getId());
+    var sh = ss.getSheets()[0];
+    sh.appendRow(['Date', 'E-mail', 'Source']);
+  }
+  return ss.getSheets()[0];
 }
 
 /* ─── OUTILS ───────────────────────────────────────────────────── */

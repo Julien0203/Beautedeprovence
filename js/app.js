@@ -102,6 +102,39 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  /* ── Newsletter (pied de page) ─────────────────────────── */
+  const NL_API = 'https://script.google.com/macros/s/AKfycbzfZJN3mzVBElYgBPvO76YjFnlDTMeRxDxcny7QwigXoSQINDJn3jTxC8crj6BGuR-q/exec';
+  document.querySelectorAll('.nl-form').forEach(form => {
+    const input = form.querySelector('.nl-form__input');
+    const check = form.querySelector('.nl-form__check');
+    const btn = form.querySelector('.nl-form__btn');
+    const msg = form.querySelector('.nl-form__msg');
+    const setMsg = (t, ok) => { msg.textContent = t; msg.className = 'nl-form__msg ' + (ok ? 'is-ok' : 'is-err'); };
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const email = (input.value || '').trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setMsg('Merci d\'indiquer une adresse e-mail valide.', false); return; }
+      if (check && !check.checked) { setMsg('Merci d\'accepter de recevoir la newsletter.', false); return; }
+      btn.disabled = true;
+      const prev = btn.textContent;
+      btn.textContent = 'Envoi…';
+      try {
+        await fetch(NL_API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ type: 'subscribe', email, source: location.pathname.split('/').pop() || 'index.html' })
+        });
+        setMsg('Merci ! Votre inscription est bien enregistrée.', true);
+        form.reset();
+      } catch (err) {
+        setMsg('Une erreur est survenue. Merci de réessayer plus tard.', false);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = prev;
+      }
+    });
+  });
+
 });
 
 /* ================================================================

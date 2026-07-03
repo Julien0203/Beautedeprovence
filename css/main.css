@@ -607,6 +607,33 @@ em, i { font-style: italic; }
 .footer__credit { color: var(--text-muted); }
 .footer__credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
+/* Newsletter (pied de page) */
+.footer__nl { border-bottom: 1px solid var(--line-dark); padding-bottom: clamp(2rem, 4vw, 3rem); margin-bottom: clamp(2rem, 4vw, 3rem); }
+.footer__nl-inner {
+  display: grid; grid-template-columns: 1fr; gap: 1.5rem 3rem; align-items: center;
+}
+@media (min-width: 860px) { .footer__nl-inner { grid-template-columns: 1fr 1fr; } }
+.footer__nl-title { font-family: var(--font-display); font-size: clamp(1.4rem, 2.4vw, 1.9rem); color: var(--white); margin-bottom: .5rem; }
+.footer__nl-sub { font-size: .9rem; line-height: 1.7; max-width: 40ch; }
+.nl-form__row { display: flex; flex-wrap: wrap; gap: .625rem; }
+.nl-form__input {
+  flex: 1 1 200px; min-width: 0; padding: .8rem 1rem;
+  background: rgba(248,247,244,.06); color: var(--white);
+  border: 1px solid var(--line-dark); border-radius: 4px;
+  font-family: inherit; font-size: .9rem; transition: border-color var(--t), background var(--t);
+}
+.nl-form__input::placeholder { color: rgba(248,247,244,.4); }
+.nl-form__input:focus { outline: none; border-color: var(--olive); background: rgba(248,247,244,.1); }
+.nl-form__btn { flex: 0 0 auto; white-space: nowrap; }
+.nl-form__consent {
+  display: flex; align-items: flex-start; gap: .55rem; margin-top: .85rem;
+  font-size: .75rem; line-height: 1.5; color: rgba(248,247,244,.55); cursor: pointer;
+}
+.nl-form__check { margin-top: .15rem; accent-color: var(--olive); flex: 0 0 auto; }
+.nl-form__msg { margin-top: .75rem; font-size: .8rem; min-height: 1.1em; }
+.nl-form__msg.is-ok { color: #8fbf7f; }
+.nl-form__msg.is-err { color: #e39b8f; }
+
 /* ================================================================
    STICKY CTA / BACK TO TOP
 ================================================================ */
