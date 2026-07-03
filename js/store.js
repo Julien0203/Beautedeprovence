@@ -53,7 +53,7 @@
     write(LS.clients, demo);
 
     const campaigns = [
-      { id: uid(), type: 'Newsletter', objet: 'Les nouveautés du printemps 🌿', audience: 'Toutes les clientes consenties', destinataires: 6, date: '2025-04-08', statut: 'Envoyée (démo)' },
+      { id: uid(), type: 'Newsletter', objet: 'Les nouveautés du printemps', audience: 'Toutes les clientes consenties', destinataires: 6, date: '2025-04-08', statut: 'Envoyée (démo)' },
       { id: uid(), type: 'Promotion',  objet: '-15% sur les rituels corps ce mois-ci', audience: 'Clientes consenties', destinataires: 6, date: '2025-05-12', statut: 'Envoyée (démo)' },
     ];
     write(LS.campaigns, campaigns);

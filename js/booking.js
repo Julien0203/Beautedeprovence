@@ -68,6 +68,10 @@
     ]}
   ];
 
+  /* Icônes SVG (trait fin, style premium) */
+  var ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+  var ICON_CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>';
+
   var MONTHS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
   var WDAYS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
   var WDAYS_FULL = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
@@ -154,7 +158,7 @@
     for (var i = 0; i < labels.length; i++) {
       var n = i + 1;
       var cls = 'bk__step' + (state.step === n ? ' is-active' : '') + (state.step > n ? ' is-done' : '');
-      html += '<li class="' + cls + '"><span class="bk__step-no">' + (state.step > n ? '✓' : n) + '</span>' +
+      html += '<li class="' + cls + '"><span class="bk__step-no">' + (state.step > n ? ICON_CHECK : n) + '</span>' +
         '<span class="bk__step-lbl">' + labels[i] + '</span></li>';
     }
     return html + '</ol>';
@@ -199,6 +203,8 @@
     var offset = (first.getDay() + 6) % 7; // lundi = 0
     var daysInMonth = new Date(y, m + 1, 0).getDate();
     var today = new Date(); today.setHours(0, 0, 0, 0);
+    // Réservation possible à partir du lendemain (pas de RDV le jour même)
+    var minDay = new Date(today); minDay.setDate(minDay.getDate() + 1);
     var maxDate = new Date(); maxDate.setDate(maxDate.getDate() + CONFIG.maxDaysAhead);
 
     var prevDisabled = (y === today.getFullYear() && m === today.getMonth());
@@ -217,7 +223,7 @@
       var d = new Date(y, m, day);
       var dow = d.getDay();
       var isOpen = !!CONFIG.hours[dow];
-      var disabled = d < today || d > maxDate || !isOpen;
+      var disabled = d < minDay || d > maxDate || !isOpen;
       var iso = ymd(d);
       var sel = state.date === iso;
       var cls = 'bk__cal-cell' + (disabled ? ' is-disabled' : '') + (sel ? ' is-selected' : '');
@@ -308,7 +314,7 @@
     var telLine = '<a href="tel:' + CONFIG.phone + '" class="btn btn--outline">Appeler l\'institut</a>';
     if (confirmed) {
       return '<div class="bk__panel bk__done">' +
-        '<div class="bk__done-icon">✓</div>' +
+        '<div class="bk__done-icon">' + ICON_CHECK + '</div>' +
         '<h3 class="bk__done-title">Rendez-vous confirmé</h3>' +
         '<p class="bk__done-text">Votre ' + esc(s.name) + ' est réservé le <strong>' + esc(prettyDate(state.date)) +
           '</strong> à <strong>' + esc(state.time) + '</strong>. Un e-mail de confirmation vous a été envoyé.</p>' +
@@ -317,7 +323,7 @@
     }
     // Mode démo / agenda non connecté : on récapitule et on invite à confirmer par téléphone.
     return '<div class="bk__panel bk__done">' +
-      '<div class="bk__done-icon">🗓️</div>' +
+      '<div class="bk__done-icon">' + ICON_CAL + '</div>' +
       '<h3 class="bk__done-title">Demande enregistrée</h3>' +
       '<p class="bk__done-text">Merci ' + esc(state.contact.name || '') + '. Votre demande pour un <strong>' + esc(s.name) +
         '</strong> le <strong>' + esc(prettyDate(state.date)) + '</strong> à <strong>' + esc(state.time) +

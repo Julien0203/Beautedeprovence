@@ -68,6 +68,26 @@ document.addEventListener('DOMContentLoaded', () => {
     io2.observe(el);
   });
 
+  /* ── Hero video : autoplay + fallback image si bloqué ──── */
+  const heroVideo = document.querySelector('.hero__video');
+  if (heroVideo) {
+    const swapToImage = () => {
+      const src = heroVideo.getAttribute('data-fallback');
+      if (!src || heroVideo.dataset.swapped) return;
+      heroVideo.dataset.swapped = '1';
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = heroVideo.getAttribute('aria-label') || '';
+      img.className = 'hero__video';
+      heroVideo.replaceWith(img);
+    };
+    heroVideo.addEventListener('error', swapToImage);
+    const p = heroVideo.play();
+    if (p && typeof p.catch === 'function') {
+      p.catch(() => swapToImage());
+    }
+  }
+
   /* ── Back to top ───────────────────────────────────────── */
   backTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
@@ -87,6 +107,24 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ================================================================
    SIMULATOR ENGINE
 ================================================================ */
+/* Jeu d'icônes fines (traits, style ligne — remplace les emojis) */
+const _svg = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const ICONS = {
+  sparkle:  _svg('<path d="M12 2l1.9 6.6L20 10l-6.1 1.4L12 18l-1.9-6.6L4 10l6.1-1.4Z"/>'),
+  leaf:     _svg('<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/>'),
+  droplet:  _svg('<path d="M12 2.7 6.5 9.2a7 7 0 1 0 11 0Z"/>'),
+  clock:    _svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+  moon:     _svg('<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/>'),
+  flower:   _svg('<circle cx="12" cy="12" r="3"/><path d="M12 9a3 3 0 0 1 0-6 3 3 0 0 1 0 6ZM12 15a3 3 0 0 0 0 6 3 3 0 0 0 0-6ZM15 12a3 3 0 0 1 6 0 3 3 0 0 1-6 0ZM9 12a3 3 0 0 0-6 0 3 3 0 0 0 6 0Z"/>'),
+  wave:     _svg('<path d="M2 8c2 0 2 2 4 2s2-2 4-2 2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M2 14c2 0 2 2 4 2s2-2 4-2 2 2 4 2 2-2 4-2 2 2 4 2"/>'),
+  shield:   _svg('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>'),
+  alert:    _svg('<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/>'),
+  layers:   _svg('<path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 12l10 5 10-5M2 17l10 5 10-5"/>'),
+  activity: _svg('<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>'),
+  heart:    _svg('<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/>'),
+  smile:    _svg('<circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/>'),
+  euro:     _svg('<path d="M18 7a7 7 0 1 0 0 10M4 10h8M4 14h7"/>')
+};
 const SIM_DATA = {
   diagnostic: {
     questions: [
@@ -94,50 +132,50 @@ const SIM_DATA = {
         id: 'type',
         q: 'Comment se sent votre peau en milieu de journée ?',
         opts: [
-          { icon: '✨', label: 'Brillante, zone T luisante', val: 'oily' },
-          { icon: '🌿', label: 'Équilibrée, confortable', val: 'normal' },
-          { icon: '🍂', label: 'Tiraillante, inconfortable', val: 'dry' },
-          { icon: '🎭', label: 'Mixte — grasse et sèche', val: 'mixed' },
+          { icon: ICONS.sparkle, label: 'Brillante, zone T luisante', val: 'oily' },
+          { icon: ICONS.leaf, label: 'Équilibrée, confortable', val: 'normal' },
+          { icon: ICONS.leaf, label: 'Tiraillante, inconfortable', val: 'dry' },
+          { icon: ICONS.layers, label: 'Mixte — grasse et sèche', val: 'mixed' },
         ]
       },
       {
         id: 'concern',
         q: 'Votre principale préoccupation cutanée ?',
         opts: [
-          { icon: '💧', label: 'Hydratation & confort', val: 'hydration' },
-          { icon: '✨', label: 'Éclat & luminosité', val: 'radiance' },
-          { icon: '⏳', label: 'Anti-âge & fermeté', val: 'antiage' },
-          { icon: '🌿', label: 'Pureté & détox', val: 'detox' },
+          { icon: ICONS.droplet, label: 'Hydratation & confort', val: 'hydration' },
+          { icon: ICONS.sparkle, label: 'Éclat & luminosité', val: 'radiance' },
+          { icon: ICONS.clock, label: 'Anti-âge & fermeté', val: 'antiage' },
+          { icon: ICONS.leaf, label: 'Pureté & détox', val: 'detox' },
         ]
       },
       {
         id: 'sensitivity',
         q: 'Votre peau est-elle réactive ?',
         opts: [
-          { icon: '🚨', label: 'Oui, souvent', val: 'sensitive' },
-          { icon: '⚡', label: 'Parfois', val: 'moderate' },
-          { icon: '💪', label: 'Rarement', val: 'resilient' },
+          { icon: ICONS.alert, label: 'Oui, souvent', val: 'sensitive' },
+          { icon: ICONS.activity, label: 'Parfois', val: 'moderate' },
+          { icon: ICONS.shield, label: 'Rarement', val: 'resilient' },
         ]
       }
     ],
     results: {
-      oily_hydration:  { icon: '💧', type: 'Peau grasse déshydratée',   desc: 'Une peau qui brille mais manque d\'eau : le Soin signature nourrit en profondeur sans effet gras, avec les actifs OLIV\'.', soins: ['Soin signature — 130€', 'Cocon lavande — 50€'], url: 'visage.html' },
-      oily_radiance:   { icon: '✨', type: 'Peau grasse à illuminer',    desc: 'Le Kobido, massage facial japonais, affine le grain de peau et ravive l\'éclat naturel de votre teint.', soins: ['Kobido — 95€', '+ Vapeur — 10€'], url: 'visage.html' },
-      oily_antiage:    { icon: '⏳', type: 'Peau grasse mature',         desc: 'Le Rituel Kobido raffermit et lisse tout en régulant, pour une peau tonique et équilibrée.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
-      oily_detox:      { icon: '🌿', type: 'Peau grasse à purifier',     desc: 'Le Soin rénovateur purifie et rééquilibre en profondeur pour un teint net et mat.', soins: ['Soin rénovateur — sur demande', '+ Vapeur — 10€'], url: 'visage.html' },
-      dry_hydration:   { icon: '💧', type: 'Peau sèche à nourrir',       desc: 'Nutrition intense : le Soin signature et les huiles OLIV\' réconfortent durablement les peaux sèches.', soins: ['Soin signature — 130€', 'Cocon lavande — 50€'], url: 'visage.html' },
-      dry_radiance:    { icon: '🌸', type: 'Peau sèche à illuminer',     desc: 'Le Kobido relance la microcirculation pour retrouver un teint lumineux et confortable.', soins: ['Kobido — 95€'], url: 'visage.html' },
-      dry_antiage:     { icon: '⏳', type: 'Peau sèche à revitaliser',   desc: 'Le Rituel Kobido raffermit et nourrit en profondeur pour une peau repulpée et détendue.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
-      dry_detox:       { icon: '🌿', type: 'Peau sèche sensibilisée',    desc: 'Le Soin rénovateur rééquilibre en douceur la barrière cutanée fragilisée.', soins: ['Soin rénovateur — sur demande'], url: 'visage.html' },
-      mixed_hydration: { icon: '💧', type: 'Peau mixte à équilibrer',    desc: 'Le Soin signature hydrate zone par zone pour un teint homogène et confortable.', soins: ['Soin signature — 130€'], url: 'visage.html' },
-      mixed_radiance:  { icon: '✨', type: 'Peau mixte à illuminer',     desc: 'Le Kobido unifie et illumine, révélant la luminosité naturelle des peaux mixtes.', soins: ['Kobido — 95€', '+ Vapeur — 10€'], url: 'visage.html' },
-      mixed_antiage:   { icon: '⏳', type: 'Peau mixte mature',          desc: 'Le Rituel Kobido conjugue fermeté et équilibre pour une peau lissée et rééquilibrée.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
-      mixed_detox:     { icon: '🌿', type: 'Peau mixte à purifier',      desc: 'Le Soin rénovateur cible les impuretés de la zone T tout en respectant les joues.', soins: ['Soin rénovateur — sur demande'], url: 'visage.html' },
-      normal_hydration:{ icon: '💧', type: 'Peau équilibrée à hydrater', desc: 'Le Soin signature entretient le confort et la souplesse de votre peau avec les soins OLIV\'.', soins: ['Soin signature — 130€'], url: 'visage.html' },
-      normal_radiance: { icon: '🌸', type: 'Peau équilibrée à sublimer', desc: 'Offrez à votre peau saine le Kobido pour un éclat immédiat et une détente profonde.', soins: ['Kobido — 95€', '+ Vapeur — 10€'], url: 'visage.html' },
-      normal_antiage:  { icon: '⏳', type: 'Peau à préserver',           desc: 'Le Rituel Kobido, en prévention, entretient fermeté et jeunesse naturellement.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
-      normal_detox:    { icon: '🌿', type: 'Peau à purifier',            desc: 'Le Soin rénovateur élimine les impuretés et redonne fraîcheur au teint.', soins: ['Soin rénovateur — sur demande'], url: 'visage.html' },
-      default:         { icon: '💆', type: 'Soin sur mesure',            desc: 'Votre profil mérite une consultation personnalisée. Andréa établira le protocole idéal lors de votre rendez-vous.', soins: ['Consultation & bilan peau', 'Soin visage — dès 95€'], url: 'rendez-vous.html' }
+      oily_hydration:  { icon: ICONS.droplet, type: 'Peau grasse déshydratée',   desc: 'Une peau qui brille mais manque d\'eau : le Soin signature nourrit en profondeur sans effet gras, avec les actifs OLIV\'.', soins: ['Soin signature — 130€', 'Cocon lavande — 50€'], url: 'visage.html' },
+      oily_radiance:   { icon: ICONS.sparkle, type: 'Peau grasse à illuminer',    desc: 'Le Kobido, massage facial japonais, affine le grain de peau et ravive l\'éclat naturel de votre teint.', soins: ['Kobido — 95€', '+ Vapeur — 10€'], url: 'visage.html' },
+      oily_antiage:    { icon: ICONS.clock, type: 'Peau grasse mature',         desc: 'Le Rituel Kobido raffermit et lisse tout en régulant, pour une peau tonique et équilibrée.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
+      oily_detox:      { icon: ICONS.leaf, type: 'Peau grasse à purifier',     desc: 'Le Soin rénovateur purifie et rééquilibre en profondeur pour un teint net et mat.', soins: ['Soin rénovateur — sur demande', '+ Vapeur — 10€'], url: 'visage.html' },
+      dry_hydration:   { icon: ICONS.droplet, type: 'Peau sèche à nourrir',       desc: 'Nutrition intense : le Soin signature et les huiles OLIV\' réconfortent durablement les peaux sèches.', soins: ['Soin signature — 130€', 'Cocon lavande — 50€'], url: 'visage.html' },
+      dry_radiance:    { icon: ICONS.flower, type: 'Peau sèche à illuminer',     desc: 'Le Kobido relance la microcirculation pour retrouver un teint lumineux et confortable.', soins: ['Kobido — 95€'], url: 'visage.html' },
+      dry_antiage:     { icon: ICONS.clock, type: 'Peau sèche à revitaliser',   desc: 'Le Rituel Kobido raffermit et nourrit en profondeur pour une peau repulpée et détendue.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
+      dry_detox:       { icon: ICONS.leaf, type: 'Peau sèche sensibilisée',    desc: 'Le Soin rénovateur rééquilibre en douceur la barrière cutanée fragilisée.', soins: ['Soin rénovateur — sur demande'], url: 'visage.html' },
+      mixed_hydration: { icon: ICONS.droplet, type: 'Peau mixte à équilibrer',    desc: 'Le Soin signature hydrate zone par zone pour un teint homogène et confortable.', soins: ['Soin signature — 130€'], url: 'visage.html' },
+      mixed_radiance:  { icon: ICONS.sparkle, type: 'Peau mixte à illuminer',     desc: 'Le Kobido unifie et illumine, révélant la luminosité naturelle des peaux mixtes.', soins: ['Kobido — 95€', '+ Vapeur — 10€'], url: 'visage.html' },
+      mixed_antiage:   { icon: ICONS.clock, type: 'Peau mixte mature',          desc: 'Le Rituel Kobido conjugue fermeté et équilibre pour une peau lissée et rééquilibrée.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
+      mixed_detox:     { icon: ICONS.leaf, type: 'Peau mixte à purifier',      desc: 'Le Soin rénovateur cible les impuretés de la zone T tout en respectant les joues.', soins: ['Soin rénovateur — sur demande'], url: 'visage.html' },
+      normal_hydration:{ icon: ICONS.droplet, type: 'Peau équilibrée à hydrater', desc: 'Le Soin signature entretient le confort et la souplesse de votre peau avec les soins OLIV\'.', soins: ['Soin signature — 130€'], url: 'visage.html' },
+      normal_radiance: { icon: ICONS.flower, type: 'Peau équilibrée à sublimer', desc: 'Offrez à votre peau saine le Kobido pour un éclat immédiat et une détente profonde.', soins: ['Kobido — 95€', '+ Vapeur — 10€'], url: 'visage.html' },
+      normal_antiage:  { icon: ICONS.clock, type: 'Peau à préserver',           desc: 'Le Rituel Kobido, en prévention, entretient fermeté et jeunesse naturellement.', soins: ['Rituel Kobido — 130€'], url: 'visage.html' },
+      normal_detox:    { icon: ICONS.leaf, type: 'Peau à purifier',            desc: 'Le Soin rénovateur élimine les impuretés et redonne fraîcheur au teint.', soins: ['Soin rénovateur — sur demande'], url: 'visage.html' },
+      default:         { icon: ICONS.flower, type: 'Soin sur mesure',            desc: 'Votre profil mérite une consultation personnalisée. Andréa établira le protocole idéal lors de votre rendez-vous.', soins: ['Consultation & bilan peau', 'Soin visage — dès 95€'], url: 'rendez-vous.html' }
     }
   },
   conseiller: {
@@ -146,36 +184,36 @@ const SIM_DATA = {
         id: 'goal',
         q: 'Qu\'attendez-vous de votre séance aujourd\'hui ?',
         opts: [
-          { icon: '😌', label: 'Détente & relâchement des tensions', val: 'relax' },
-          { icon: '✨', label: 'Prendre soin de mon visage', val: 'skin' },
-          { icon: '🌿', label: 'Un rituel corps immersif', val: 'ritual' },
-          { icon: '🌸', label: 'Épilation & finitions', val: 'beauty' },
+          { icon: ICONS.smile, label: 'Détente & relâchement des tensions', val: 'relax' },
+          { icon: ICONS.sparkle, label: 'Prendre soin de mon visage', val: 'skin' },
+          { icon: ICONS.leaf, label: 'Un rituel corps immersif', val: 'ritual' },
+          { icon: ICONS.flower, label: 'Épilation & finitions', val: 'beauty' },
         ]
       },
       {
         id: 'duration',
         q: 'Quelle durée souhaitez-vous consacrer ?',
         opts: [
-          { icon: '⏱', label: 'Express — 30 à 45 min', val: 'short' },
-          { icon: '⏰', label: 'Confortable — 1h à 1h30', val: 'medium' },
-          { icon: '🌙', label: 'Immersif — 2h et plus', val: 'long' },
+          { icon: ICONS.clock, label: 'Express — 30 à 45 min', val: 'short' },
+          { icon: ICONS.clock, label: 'Confortable — 1h à 1h30', val: 'medium' },
+          { icon: ICONS.moon, label: 'Immersif — 2h et plus', val: 'long' },
         ]
       }
     ],
     results: {
-      relax_short:  { icon: '💆', soin: 'Massage Sieste',              desc: 'Une parenthèse de 30 minutes pour relâcher dos et nuque et repartir apaisé(e).', duree: '30 min', tarif: '50€', url: 'massages.html' },
-      relax_medium: { icon: '🌊', soin: 'Massage Pause',               desc: 'Une heure de détente enveloppante, effleurages longs aux huiles OLIV\' pour dénouer les tensions.', duree: '1h', tarif: '100€', url: 'massages.html' },
-      relax_long:   { icon: '🌙', soin: 'Massage de l\'Oléraie',       desc: 'Un modelage complet de 1h30, l\'immersion sensorielle absolue signée Beauté de Provence.', duree: '1h30', tarif: '150€', url: 'massages.html' },
-      skin_short:   { icon: '✨', soin: 'Kobido',                       desc: 'Le massage facial japonais, liftant et éclatant. Nos soins visage démarrent en 1h.', duree: '1h', tarif: '95€', url: 'visage.html' },
-      skin_medium:  { icon: '🌸', soin: 'Soin signature',              desc: 'Un soin visage complet sur mesure : nettoyage, modelage et actifs OLIV\'.', duree: '1h30', tarif: '130€', url: 'visage.html' },
-      skin_long:    { icon: '🌸', soin: 'Rituel Kobido',               desc: 'Kobido et soin complet réunis pour une peau raffermie, lumineuse et détendue.', duree: '1h30', tarif: '130€', url: 'visage.html' },
-      ritual_short: { icon: '🌿', soin: 'Instant corps',               desc: 'Gommage sablé ou cocon lavande : une bulle express de 30 à 45 minutes.', duree: '30–45 min', tarif: '50–70€', url: 'corps.html' },
-      ritual_medium:{ icon: '🫒', soin: 'Rituel corps de Provence',    desc: 'Un rituel corps aux essences de Provence — des Oliviers au rituel des Alpilles.', duree: '1h–1h30', tarif: '100–145€', url: 'corps.html' },
-      ritual_long:  { icon: '🌙', soin: 'Rituel des Bastides',         desc: 'L\'expérience longue : 2h à 2h30 de soin corps complet, jusqu\'au Rituel signature.', duree: '2h–2h30', tarif: '190–220€', url: 'corps.html' },
-      beauty_short: { icon: '🌸', soin: 'Épilation express',           desc: 'Sourcils, lèvre ou menton : une finition nette en quelques minutes.', duree: '10–15 min', tarif: 'dès 8€', url: 'epilations.html' },
-      beauty_medium:{ icon: '🌸', soin: 'Épilation visage ou jambes',  desc: 'Visage complet ou demi-jambes : une épilation soignée et durable.', duree: '20–30 min', tarif: '20–30€', url: 'epilations.html' },
-      beauty_long:  { icon: '🌸', soin: 'Épilation complète',          desc: 'Jambes, maillot et aisselles : le combo complet pour une peau douce.', duree: '45 min–1h', tarif: 'dès 45€', url: 'epilations.html' },
-      default:      { icon: '🤝', soin: 'Consultation personnalisée',  desc: 'Andréa compose votre séance idéale selon votre profil. Appelez pour en discuter.', duree: 'Sur mesure', tarif: 'Sur devis', url: 'rendez-vous.html' }
+      relax_short:  { icon: ICONS.flower, soin: 'Massage Sieste',              desc: 'Une parenthèse de 30 minutes pour relâcher dos et nuque et repartir apaisé(e).', duree: '30 min', tarif: '50€', url: 'massages.html' },
+      relax_medium: { icon: ICONS.wave, soin: 'Massage Pause',               desc: 'Une heure de détente enveloppante, effleurages longs aux huiles OLIV\' pour dénouer les tensions.', duree: '1h', tarif: '100€', url: 'massages.html' },
+      relax_long:   { icon: ICONS.moon, soin: 'Massage de l\'Oléraie',       desc: 'Un modelage complet de 1h30, l\'immersion sensorielle absolue signée Beauté de Provence.', duree: '1h30', tarif: '150€', url: 'massages.html' },
+      skin_short:   { icon: ICONS.sparkle, soin: 'Kobido',                       desc: 'Le massage facial japonais, liftant et éclatant. Nos soins visage démarrent en 1h.', duree: '1h', tarif: '95€', url: 'visage.html' },
+      skin_medium:  { icon: ICONS.flower, soin: 'Soin signature',              desc: 'Un soin visage complet sur mesure : nettoyage, modelage et actifs OLIV\'.', duree: '1h30', tarif: '130€', url: 'visage.html' },
+      skin_long:    { icon: ICONS.flower, soin: 'Rituel Kobido',               desc: 'Kobido et soin complet réunis pour une peau raffermie, lumineuse et détendue.', duree: '1h30', tarif: '130€', url: 'visage.html' },
+      ritual_short: { icon: ICONS.leaf, soin: 'Instant corps',               desc: 'Gommage sablé ou cocon lavande : une bulle express de 30 à 45 minutes.', duree: '30–45 min', tarif: '50–70€', url: 'corps.html' },
+      ritual_medium:{ icon: ICONS.leaf, soin: 'Rituel corps de Provence',    desc: 'Un rituel corps aux essences de Provence — des Oliviers au rituel des Alpilles.', duree: '1h–1h30', tarif: '100–145€', url: 'corps.html' },
+      ritual_long:  { icon: ICONS.moon, soin: 'Rituel des Bastides',         desc: 'L\'expérience longue : 2h à 2h30 de soin corps complet, jusqu\'au Rituel signature.', duree: '2h–2h30', tarif: '190–220€', url: 'corps.html' },
+      beauty_short: { icon: ICONS.flower, soin: 'Épilation express',           desc: 'Sourcils, lèvre ou menton : une finition nette en quelques minutes.', duree: '10–15 min', tarif: 'dès 8€', url: 'epilations.html' },
+      beauty_medium:{ icon: ICONS.flower, soin: 'Épilation visage ou jambes',  desc: 'Visage complet ou demi-jambes : une épilation soignée et durable.', duree: '20–30 min', tarif: '20–30€', url: 'epilations.html' },
+      beauty_long:  { icon: ICONS.flower, soin: 'Épilation complète',          desc: 'Jambes, maillot et aisselles : le combo complet pour une peau douce.', duree: '45 min–1h', tarif: 'dès 45€', url: 'epilations.html' },
+      default:      { icon: ICONS.heart, soin: 'Consultation personnalisée',  desc: 'Andréa compose votre séance idéale selon votre profil. Appelez pour en discuter.', duree: 'Sur mesure', tarif: 'Sur devis', url: 'rendez-vous.html' }
     }
   }
 };
@@ -246,7 +284,7 @@ class Sim {
       <p class="sim-result__type d3">${isD ? r.type : r.soin}</p>
       <p class="sim-result__desc body">${r.desc}</p>
       ${isD ? `<div class="sim-result__tags">${r.soins.map(s => `<span class="sim-tag">${s}</span>`).join('')}</div>` :
-               `<div class="sim-result__tags"><span class="sim-tag">⏱ ${r.duree}</span><span class="sim-tag">💰 ${r.tarif}</span></div>`}
+               `<div class="sim-result__tags"><span class="sim-tag"><span class="sim-tag__ic">${ICONS.clock}</span>${r.duree}</span><span class="sim-tag"><span class="sim-tag__ic">${ICONS.euro}</span>${r.tarif}</span></div>`}
       <div class="sim-result__actions">
         <a href="${r.url}" class="btn btn--outline">Découvrir</a>
         <a href="rendez-vous.html" class="btn btn--olive">Prendre RDV</a>
