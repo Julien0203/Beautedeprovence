@@ -189,7 +189,7 @@ em, i { font-style: italic; }
 }
 .hero__overlay {
   position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(to bottom, rgba(20,18,14,.55) 0%, rgba(20,18,14,.62) 55%, rgba(20,18,14,.72) 100%);
+  background: linear-gradient(to bottom, rgba(16,14,11,.68) 0%, rgba(16,14,11,.74) 55%, rgba(16,14,11,.84) 100%);
 }
 .hero__content {
   position: relative; z-index: 2; text-align: center;
