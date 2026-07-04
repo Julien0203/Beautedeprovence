@@ -17,6 +17,7 @@
     phone: '+33783035319',
     phoneDisplay: '07 83 03 53 19',
     slotStep: 30,                     // granularité des créneaux (minutes)
+    battement: 30,                    // marge bloquée APRÈS chaque soin (min) : remise en état / battement entre clientes
     leadHours: 2,                     // délai minimum avant un RDV (heures)
     maxDaysAhead: 60,                 // horizon de réservation
     // Horaires d'ouverture par jour (0 = dimanche … 6 = samedi). [ouverture, fermeture] en heures.
@@ -24,10 +25,11 @@
   };
 
   /* ── CARTE DES PRESTATIONS (tarifs réels) ──────────────────────
-     dur    = durée du soin (annoncée à la cliente ET bloquée dans l'agenda), en minutes.
-              Le bloc agenda correspond EXACTEMENT à l'horaire annoncé (pas de marge),
-              ce qui garantit des créneaux à l'heure pile ou à la demi-heure.
-     cabine = (indicatif) temps réel en cabine ; NON appliqué au blocage agenda.
+     dur    = durée du soin annoncée à la cliente (affichée), en minutes.
+              L'agenda bloque « dur + battement » (voir CONFIG.battement) : un
+              battement fixe de 30 min est réservé APRÈS chaque soin. La cliente
+              voit « dur », l'agenda réserve « dur + 30 min ».
+     cabine = (héritage) valeur informative, non utilisée pour le blocage.
      price  = prix en € (null = « Sur devis »)
   ---------------------------------------------------------------- */
   var SERVICES = [
@@ -101,9 +103,12 @@
   /* ── HELPERS ───────────────────────────────────────────────── */
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function ymd(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
-  /* Durée à BLOQUER dans l'agenda = durée du soin (aucune marge avant/après,
-     le bloc agenda correspond exactement à l'horaire annoncé à la cliente). */
-  function blockDur(s) { return s ? s.dur : 0; }
+  /* Durée à BLOQUER dans l'agenda = durée du soin + un battement fixe (CONFIG.battement,
+     30 min) réservé APRÈS chaque soin (remise en état / transition entre clientes).
+     La cliente voit « dur » sur sa confirmation ; l'agenda bloque « dur + battement ».
+     Le battement étant TOUJOURS après (jamais avant), les créneaux proposés restent
+     à l'heure pile ou à la demi-heure, et aucun doublon n'est possible sur la marge. */
+  function blockDur(s) { return s ? s.dur + CONFIG.battement : 0; }
   function priceLabel(p) { return p == null ? 'Sur devis' : p + '\u00A0€'; }
   function durLabel(m) {
     var h = Math.floor(m / 60), mn = m % 60;
@@ -422,8 +427,12 @@
     });
 
     // Étape 3 : chargement des créneaux
+    // On envoie la MÊME valeur (soin + battement) pour dur et sold : l'agenda
+    // bloque un seul bloc contigu à partir de l'heure choisie → créneaux garantis
+    // à l'heure pile / demi-heure (aucune marge placée avant le soin).
     if (state.step === 3) {
-      fetchSlots(state.date, blockDur(state.service), state.service.dur).then(renderSlots);
+      var block = blockDur(state.service);
+      fetchSlots(state.date, block, block).then(renderSlots);
     }
 
     // Navigation
@@ -470,8 +479,9 @@
     var payload = {
       serviceId: state.service.id,
       service: state.service.name,
-      duration: blockDur(state.service),   // temps réellement bloqué en cabine
-      soldDuration: state.service.dur,     // durée annoncée à la cliente
+      duration: blockDur(state.service),   // soin + battement : bloc réservé dans l'agenda
+      soldDuration: blockDur(state.service), // = duration : bloc contigu, aucune marge avant le soin
+      soinDuration: state.service.dur,     // durée réelle du soin (info, affichée à la cliente)
       price: state.service.price,
       date: state.date,
       time: state.time,
