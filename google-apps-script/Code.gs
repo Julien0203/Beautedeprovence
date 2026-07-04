@@ -57,15 +57,15 @@ function doPost(e) {
 }
 
 /* ─── CALCUL DES CRÉNEAUX LIBRES ───────────────────────────────────
-   durMin  = temps cabine total à bloquer dans l'agenda.
+   durMin  = temps total à bloquer dans l'agenda.
    soldMin = durée du soin annoncée à la cliente (par défaut = durMin).
-   L'horaire renvoyé = début du SOIN. Le supplément (durMin − soldMin)
-   est réparti moitié avant / moitié après le soin :
-   bloc réservé = [soin − avant , soin + soldMin + après]. */
+   L'horaire renvoyé = début du SOIN. Toute marge éventuelle (durMin − soldMin)
+   est placée APRÈS le soin (jamais avant) pour garder des créneaux à l'heure
+   pile ou à la demi-heure : bloc réservé = [soin , soin + durMin]. */
 function getSlots(dateStr, durMin, soldMin) {
   soldMin = soldMin || durMin;
-  var before = Math.floor((durMin - soldMin) / 2);
-  var after  = durMin - soldMin - before;
+  var before = 0;
+  var after  = durMin - soldMin;
 
   var open = OPEN_HOURS[dayOfWeek(dateStr)];
   if (!open) return [];
@@ -104,10 +104,10 @@ function book(d) {
   if (!d.date || !d.time || !d.service || !d.name || !d.phone) {
     return { ok: false, error: 'Champs manquants' };
   }
-  var cabine = d.duration || 60;                 // temps cabine total à bloquer
+  var cabine = d.duration || 60;                 // temps total à bloquer
   var sold   = d.soldDuration || cabine;         // durée du soin
-  var before = Math.floor((cabine - sold) / 2);
-  var after  = cabine - sold - before;
+  var before = 0;                                // aucune marge avant (créneaux à :00/:30)
+  var after  = cabine - sold;                    // marge éventuelle après le soin
 
   // Vérifie que le créneau (début du soin) est toujours libre
   var still = getSlots(d.date, cabine, sold);

@@ -24,10 +24,10 @@
   };
 
   /* ── CARTE DES PRESTATIONS (tarifs réels) ──────────────────────
-     dur    = durée du soin (annoncée à la cliente), en minutes
-     cabine = temps réellement occupé en cabine, en minutes (bloqué dans l'agenda).
-              Le supplément (cabine − dur) est réparti moitié avant / moitié après le soin.
-              Si cabine est absent, le blocage = dur.
+     dur    = durée du soin (annoncée à la cliente ET bloquée dans l'agenda), en minutes.
+              Le bloc agenda correspond EXACTEMENT à l'horaire annoncé (pas de marge),
+              ce qui garantit des créneaux à l'heure pile ou à la demi-heure.
+     cabine = (indicatif) temps réel en cabine ; NON appliqué au blocage agenda.
      price  = prix en € (null = « Sur devis »)
   ---------------------------------------------------------------- */
   var SERVICES = [
@@ -101,8 +101,9 @@
   /* ── HELPERS ───────────────────────────────────────────────── */
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function ymd(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
-  /* Durée à BLOQUER dans l'agenda = temps en cabine (cabine) si défini, sinon la durée vendue. */
-  function blockDur(s) { return (s && s.cabine) ? s.cabine : (s ? s.dur : 0); }
+  /* Durée à BLOQUER dans l'agenda = durée du soin (aucune marge avant/après,
+     le bloc agenda correspond exactement à l'horaire annoncé à la cliente). */
+  function blockDur(s) { return s ? s.dur : 0; }
   function priceLabel(p) { return p == null ? 'Sur devis' : p + '\u00A0€'; }
   function durLabel(m) {
     var h = Math.floor(m / 60), mn = m % 60;
@@ -117,14 +118,14 @@
   }
 
   /* ── GÉNÉRATION LOCALE DES CRÉNEAUX (mode démo / fallback) ────
-     cabineMin = temps total bloqué en cabine ; soldMin = durée du soin.
-     L'horaire proposé à la cliente = début du SOIN. Le supplément
-     (cabineMin − soldMin) est réparti moitié avant / moitié après :
-     le bloc agenda = [soin − avant , soin + soldMin + après]. */
+     cabineMin = temps total bloqué ; soldMin = durée du soin.
+     L'horaire proposé à la cliente = début du SOIN. Toute marge éventuelle
+     (cabineMin − soldMin) est placée APRÈS le soin (jamais avant), pour des
+     créneaux à l'heure pile / demi-heure : bloc = [soin , soin + cabineMin]. */
   function localSlots(ymdStr, cabineMin, soldMin) {
     soldMin = soldMin || cabineMin;
-    var before = Math.floor((cabineMin - soldMin) / 2);
-    var after = cabineMin - soldMin - before;
+    var before = 0;
+    var after = cabineMin - soldMin;
     var p = ymdStr.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2]);
     var open = CONFIG.hours[d.getDay()];
     if (!open) return [];
