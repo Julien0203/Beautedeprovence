@@ -37,10 +37,9 @@ var OPEN_HOURS = {
 function doGet(e) {
   var action = e && e.parameter ? e.parameter.action : '';
   if (action === 'slots') {
-    var date = e.parameter.date;                 // 'YYYY-MM-DD'
-    var dur  = parseInt(e.parameter.dur, 10) || 60;   // temps cabine total à bloquer
-    var sold = parseInt(e.parameter.sold, 10) || dur; // durée du soin (par défaut = cabine)
-    return json({ slots: getSlots(date, dur, sold) });
+    var date  = e.parameter.date;                        // 'YYYY-MM-DD'
+    var block = parseInt(e.parameter.dur, 10) || 60;     // durée totale à bloquer (soin + battement)
+    return json({ slots: getSlots(date, block) });
   }
   return json({ ok: true, service: SALON_NAME + ' — booking API' });
 }
@@ -57,15 +56,13 @@ function doPost(e) {
 }
 
 /* ─── CALCUL DES CRÉNEAUX LIBRES ───────────────────────────────────
-   durMin  = temps total à bloquer dans l'agenda.
-   soldMin = durée du soin annoncée à la cliente (par défaut = durMin).
-   L'horaire renvoyé = début du SOIN. Toute marge éventuelle (durMin − soldMin)
-   est placée APRÈS le soin (jamais avant) pour garder des créneaux à l'heure
-   pile ou à la demi-heure : bloc réservé = [soin , soin + durMin]. */
-function getSlots(dateStr, durMin, soldMin) {
-  soldMin = soldMin || durMin;
-  var before = 0;
-  var after  = durMin - soldMin;
+   blockMin = durée totale à bloquer dans l'agenda (soin + battement).
+   L'horaire renvoyé = début du rendez-vous. Le bloc réservé = [t , t + blockMin]
+   part TOUJOURS de l'heure choisie (aucune marge avant) → créneaux garantis à
+   l'heure pile ou à la demi-heure. Un événement existant (RDV saisi à la main
+   inclus) qui chevauche le bloc rend le créneau indisponible : aucun doublon. */
+function getSlots(dateStr, blockMin) {
+  blockMin = blockMin || 60;
 
   var open = OPEN_HOURS[dayOfWeek(dateStr)];
   if (!open) return [];
@@ -75,24 +72,22 @@ function getSlots(dateStr, durMin, soldMin) {
   var dayEnd   = dateTime(dateStr, open[1], 0);
 
   // Événements occupés du jour (élargis pour capter les blocs qui débordent avant l'ouverture)
-  var events = cal.getEvents(new Date(dayStart.getTime() - durMin * 60000), dayEnd);
+  var events = cal.getEvents(new Date(dayStart.getTime() - blockMin * 60000), dayEnd);
   var busy = events
     .filter(function (ev) { return !ev.isAllDayEvent() && ev.getMyStatus() !== CalendarApp.GuestStatus.NO; })
     .map(function (ev) { return { s: ev.getStartTime().getTime(), e: ev.getEndTime().getTime() }; });
 
-  var now = Date.now();
-  var minTime = now + LEAD_HOURS * 3600 * 1000;
+  var minTime = Date.now() + LEAD_HOURS * 3600 * 1000;
   var slots = [];
 
-  // t = début du soin ; le bloc [t−avant , t+soldMin+après] doit tenir dans l'ouverture
-  for (var t = dayStart.getTime() + before * 60000;
-       t + (soldMin + after) * 60000 <= dayEnd.getTime();
+  // t = début du RDV ; le bloc [t , t + blockMin] doit tenir dans les horaires d'ouverture
+  for (var t = dayStart.getTime();
+       t + blockMin * 60000 <= dayEnd.getTime();
        t += SLOT_MIN * 60000) {
     if (t < minTime) continue;
-    var blockStart = t - before * 60000;
-    var blockEnd   = t + (soldMin + after) * 60000;
+    var blockEnd = t + blockMin * 60000;
     var overlap = busy.some(function (b) {
-      return blockStart < (b.e + BUFFER_MIN * 60000) && (blockEnd + BUFFER_MIN * 60000) > b.s;
+      return t < (b.e + BUFFER_MIN * 60000) && (blockEnd + BUFFER_MIN * 60000) > b.s;
     });
     if (!overlap) slots.push(Utilities.formatDate(new Date(t), TIMEZONE, 'HH:mm'));
   }
@@ -104,30 +99,28 @@ function book(d) {
   if (!d.date || !d.time || !d.service || !d.name || !d.phone) {
     return { ok: false, error: 'Champs manquants' };
   }
-  var cabine = d.duration || 60;                 // temps total à bloquer
-  var sold   = d.soldDuration || cabine;         // durée du soin
-  var before = 0;                                // aucune marge avant (créneaux à :00/:30)
-  var after  = cabine - sold;                    // marge éventuelle après le soin
+  var block = d.duration || 60;                          // temps total bloqué dans l'agenda (soin + battement)
+  var soin  = d.soinDuration || d.soldDuration || block; // durée réelle du soin (affichée à la cliente)
 
-  // Vérifie que le créneau (début du soin) est toujours libre
-  var still = getSlots(d.date, cabine, sold);
+  // Vérifie que le créneau est toujours libre (bloc complet)
+  var still = getSlots(d.date, block);
   if (still.indexOf(d.time) === -1) {
     return { ok: false, error: 'Créneau déjà pris', slots: still };
   }
 
   var hm = d.time.split(':');
-  var soinStart = dateTime(d.date, parseInt(hm[0], 10), parseInt(hm[1], 10));
-  // Bloc agenda centré : moitié du supplément avant le soin, moitié après
-  var start = new Date(soinStart.getTime() - before * 60000);
-  var end   = new Date(soinStart.getTime() + (sold + after) * 60000);
+  var start = dateTime(d.date, parseInt(hm[0], 10), parseInt(hm[1], 10));  // début du RDV
+  var soinEnd = new Date(start.getTime() + soin * 60000);                  // fin du soin
+  var end     = new Date(start.getTime() + block * 60000);                 // fin du bloc agenda (soin + battement)
+  var battement = block - soin;
 
   var priceTxt = (d.price == null || d.price === '') ? 'Sur devis' : d.price + ' €';
-  var soinTxt = Utilities.formatDate(soinStart, TIMEZONE, 'HH:mm') + ' → ' +
-    Utilities.formatDate(new Date(soinStart.getTime() + sold * 60000), TIMEZONE, 'HH:mm');
+  var soinTxt = Utilities.formatDate(start, TIMEZONE, 'HH:mm') + ' → ' +
+    Utilities.formatDate(soinEnd, TIMEZONE, 'HH:mm');
   var desc =
     'Prestation : ' + d.service + '\n' +
-    'Durée soin : ' + sold + ' min (' + soinTxt + ')\n' +
-    (cabine !== sold ? 'Temps cabine bloqué : ' + cabine + ' min (' + before + ' min avant + ' + after + ' min après)\n' : '') +
+    'Durée du soin : ' + durFr(soin) + ' (' + soinTxt + ')\n' +
+    (battement > 0 ? 'Battement : ' + battement + ' min (créneau bloqué jusqu\'à ' + Utilities.formatDate(end, TIMEZONE, 'HH:mm') + ')\n' : '') +
     'Tarif : ' + priceTxt + '\n' +
     'Client : ' + d.name + '\n' +
     'Téléphone : ' + d.phone + '\n' +
@@ -135,8 +128,9 @@ function book(d) {
     (d.notes ? 'Message : ' + d.notes + '\n' : '') +
     '\nRéservé en ligne via le site.';
 
+  // Aucun invité ajouté : la cliente reçoit UNIQUEMENT l'e-mail « Beauté de Provence »
+  // (pas l'invitation Google Agenda). L'événement reste sur l'agenda du salon.
   var options = { description: desc, location: SALON_NAME };
-  if (d.email) options.guests = d.email; // invite le client (envoie l'invitation Google)
 
   var event = getCalendar().createEvent(d.service + ' — ' + d.name, start, end, options);
 
@@ -145,13 +139,13 @@ function book(d) {
     try {
       MailApp.sendEmail(SALON_EMAIL,
         'Nouveau RDV — ' + d.name + ' (' + d.service + ')',
-        desc + '\n\nLe ' + Utilities.formatDate(soinStart, TIMEZONE, 'EEEE d MMMM yyyy \'à\' HH:mm'));
+        desc + '\n\nLe ' + Utilities.formatDate(start, TIMEZONE, 'EEEE d MMMM yyyy \'à\' HH:mm'));
     } catch (err) { /* silencieux */ }
   }
 
   // E-mail de confirmation à la cliente (optionnel)
   if (SEND_CLIENT_EMAIL && d.email) {
-    try { sendClientConfirmation(d, soinStart, sold, priceTxt); } catch (err) { /* silencieux */ }
+    try { sendClientConfirmation(d, start, soin, priceTxt); } catch (err) { /* silencieux */ }
   }
 
   return {
@@ -164,10 +158,11 @@ function book(d) {
 }
 
 /* ─── E-MAIL DE CONFIRMATION CLIENTE ───────────────────────────── */
-function sendClientConfirmation(d, soinStart, sold, priceTxt) {
+function sendClientConfirmation(d, start, soin, priceTxt) {
   var prenom  = String(d.name || '').trim().split(' ')[0] || '';
-  var jourTxt = Utilities.formatDate(soinStart, TIMEZONE, 'EEEE d MMMM yyyy');
-  var heureTxt = Utilities.formatDate(soinStart, TIMEZONE, 'HH\'h\'mm');
+  var jourTxt = Utilities.formatDate(start, TIMEZONE, 'EEEE d MMMM yyyy');
+  var heureTxt = Utilities.formatDate(start, TIMEZONE, 'HH\'h\'mm');
+  var dureeTxt = durFr(soin);
   jourTxt = jourTxt.charAt(0).toUpperCase() + jourTxt.slice(1);   // Lundi 14 juillet 2025
 
   var subject = 'Votre rendez-vous est confirmé — ' + SALON_NAME;
@@ -177,7 +172,7 @@ function sendClientConfirmation(d, soinStart, sold, priceTxt) {
     'Votre rendez-vous chez ' + SALON_NAME + ' est confirmé.\n\n' +
     'Prestation : ' + d.service + '\n' +
     'Date : ' + jourTxt + ' à ' + heureTxt + '\n' +
-    'Durée : ' + sold + ' min\n' +
+    'Durée du soin : ' + dureeTxt + '\n' +
     'Tarif : ' + priceTxt + '\n\n' +
     SALON_ADDR + '\n' +
     'Tél. ' + SALON_PHONE + '\n\n' +
@@ -198,7 +193,7 @@ function sendClientConfirmation(d, soinStart, sold, priceTxt) {
               row('Prestation', escapeHtml(d.service)) +
               row('Date', escapeHtml(jourTxt)) +
               row('Heure', escapeHtml(heureTxt)) +
-              row('Durée', sold + ' min') +
+              row('Durée du soin', escapeHtml(dureeTxt)) +
               row('Tarif', escapeHtml(priceTxt)) +
             '</table>' +
           '</td></tr>' +
@@ -316,4 +311,13 @@ function json(obj) {
   return ContentService
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
+}
+// Formate une durée en minutes → « 1h30 », « 1h », « 30 min »
+function durFr(min) {
+  min = parseInt(min, 10) || 0;
+  var h = Math.floor(min / 60);
+  var m = min % 60;
+  if (h && m) return h + 'h' + (m < 10 ? '0' + m : m);
+  if (h) return h + 'h';
+  return m + ' min';
 }
